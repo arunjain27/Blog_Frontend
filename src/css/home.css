@@ -1,0 +1,33 @@
+.home-head{
+    
+    height: auto;
+    background-color: rgb(255, 255, 255);
+    display: flex;  
+    justify-content: space-between;
+    background: linear-gradient(90deg, rgba(214,243,236,1) 0%, rgba(255,252,252,1) 0%, rgba(247,247,247,1) 0%, rgba(225,239,237,1) 0%, rgba(233,242,240,1) 100%, rgba(0,120,99,1) 100%, rgba(244,248,247,1) 100%);
+   
+    font-family: 'Times New Roman', Times, serif;
+    
+}
+ 
+.home-head-inner2{
+
+ 
+background:  radial-gradient(circle, rgba(214,243,236,1) 0%, rgba(255,252,252,1) 0%, rgba(247,247,247,1) 0%, rgba(208,255,247,1) 1%, rgba(0,153,127,1) 3%, rgba(244,248,247,1) 100%, rgba(244,248,247,1) 100%);
+align-items: center;
+
+ }
+
+       .home-head-inner2-card{
+          margin-top: 4%;
+           
+        }
+
+ .home-head-inner3{
+     
+      height: 100vh;
+      
+   
+ } 
+ 
+
