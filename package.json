@@ -19,7 +19,6 @@
     "react-dom": "^18.2.0",
     "react-pro-sidebar": "^1.1.0",
     "react-router-dom": "^6.22.3",
-    "react-scripts": "5.0.1",
     "tailwind-merge": "^2.2.2",
     "web-vitals": "^2.1.4"
   },
@@ -48,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "react-scripts": "^5.0.1"
   }
 }
