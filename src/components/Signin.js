@@ -15,6 +15,8 @@ import {
 import Navbar from "./Navbar";
 
 function SignIn() {
+   const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +33,7 @@ function SignIn() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/signin", {
+      const response = await fetch(`${BASE_URL}/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

@@ -11,6 +11,9 @@ import {
 import Navbar from "./Navbar";
 
 const Addblog = () => {
+  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+  
+ 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -21,7 +24,7 @@ const Addblog = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [generatedData, setGeneratedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
+  
   const handleChange = (event) => {
     const { name, value, files } = event.target;
     setFormData((prevData) => ({
@@ -33,7 +36,7 @@ const Addblog = () => {
   const handleGenerateAI = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:8000/generateText", {
+      const response = await fetch(`${BASE_URL}/generateText`, {
         method: "POST",
         body: JSON.stringify({
           title: formData.title,
@@ -59,8 +62,7 @@ const Addblog = () => {
       });
       setErrorMessage("");
     } catch (error) {
-      console.error("Error generating AI text:", error);
-      setErrorMessage("Failed to generate AI text. Please try again later.");
+       setErrorMessage("Failed to generate AI text. Please try again later.");
     } finally {
       setIsLoading(false);
     }
@@ -83,7 +85,7 @@ const Addblog = () => {
       formDataToSend.append("tag", formData.tag);
       formDataToSend.append("image", formData.image);
 
-      const response = await fetch("http://localhost:8000/blogdetail", {
+      const response = await fetch(`${BASE_URL}/blogdetail`, {
         method: "POST",
         headers: {
           "auth-token": token,
@@ -105,8 +107,7 @@ const Addblog = () => {
       });
       setGeneratedData(null);
     } catch (error) {
-      console.error("Error submitting form:", error);
-      setErrorMessage("Failed to submit form data. Please try again later.");
+       setErrorMessage("Failed to submit form data. Please try again later.");
     } finally {
       setIsLoading(false);
     }

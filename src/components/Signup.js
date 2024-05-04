@@ -15,6 +15,8 @@ import { Spinner } from "@chakra-ui/react";
 import Navbar from "./Navbar";
 
 function App() {
+  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +35,7 @@ function App() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:8000/signup", {
+      const response = await fetch(`${BASE_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
@@ -47,8 +49,7 @@ function App() {
       } else {
         setErrorMessage(null);
         const token = await response.json();
-        console.log(token.data);
-
+     
         localStorage.setItem("token", token.data);
 
         verify = localStorage.getItem("token");
@@ -56,7 +57,7 @@ function App() {
         if (verify) {
           window.location.href = "/";
         } else {
-          console.log("not get the token");
+          
         }
       }
     } catch (error) {

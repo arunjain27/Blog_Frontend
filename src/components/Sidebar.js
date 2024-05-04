@@ -9,7 +9,10 @@ import {
 import { NavLink } from "react-router-dom";
 import "../css/home.css";
 
+
+
 const Sidebar = ({ username, handleSignOut }) => {
+  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
   let obj = {
     fontWeight: "bold",
     fontSize: "1.1rem",
@@ -28,8 +31,7 @@ const Sidebar = ({ username, handleSignOut }) => {
   let background = "rgb(16, 57, 59)";
 
   const authToken = localStorage.getItem("token");
-  console.log("Auth token:", authToken); // Add this line for debugging
-
+ 
   return (
     <div>
       <div>

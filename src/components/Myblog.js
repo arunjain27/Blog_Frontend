@@ -3,7 +3,10 @@ import Card from "./Card";
 import Navbar from "./Navbar";
 import { Spinner } from "@chakra-ui/react";
 
+
 const MyBlog = () => {
+  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+ 
   const [userblogdetail, setUserBlogDetail] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -15,21 +18,21 @@ const MyBlog = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("http://localhost:8000/get", {
+      const response = await fetch(`${BASE_URL}/get`, {
         method: "POST",
         headers: {
           "auth-token": token,
         },
       });
       if (!response.ok) {
-        console.log("No response");
+       
         return;
       }
       const blogData = await response.json();
-      console.log(blogData.userblog);
+      
       setUserBlogDetail(blogData.userblog);
     } catch (error) {
-      console.error("Error occurred:", error);
+      
     } finally {
       setLoading(false);
     }
@@ -38,7 +41,7 @@ const MyBlog = () => {
   const handleDelete = async (deleteId) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`http://localhost:8000/${deleteId}`, {
+      const response = await fetch(`${BASE_URL}${deleteId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -51,9 +54,9 @@ const MyBlog = () => {
       setUserBlogDetail((prevState) =>
         prevState.filter((blog) => blog._id !== deleteId)
       );
-      console.log("Post deleted successfully!");
+    
     } catch (error) {
-      console.error("Error deleting post:", error);
+       
     }
   };
 

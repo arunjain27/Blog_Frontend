@@ -39,7 +39,7 @@ function NewCardComponent({
   return (
     <Card
       direction={{ base: "column", sm: "row" }}
-      overflow="auto"
+      overflow-y="auto"
       variant="outline"
       style={{
         boxShadow: "2px 2px 2px grey",
