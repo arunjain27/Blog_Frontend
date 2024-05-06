@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import Navbar from "./Navbar";
 import { Spinner } from "@chakra-ui/react";
-
+ 
 
 const MyBlog = () => {
   const BASE_URL='https://blog-backend-hcpk.onrender.com' 
- 
+ console.log(BASE_URL);
   const [userblogdetail, setUserBlogDetail] = useState([]);
   const [loading, setLoading] = useState(false);
 
