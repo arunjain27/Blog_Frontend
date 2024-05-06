@@ -15,7 +15,7 @@ import { Spinner } from "@chakra-ui/react";
 import Navbar from "./Navbar";
 
 function App() {
-  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+  const BASE_URL=process.env.REACT_APP_API_URL 
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");

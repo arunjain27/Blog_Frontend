@@ -5,7 +5,7 @@ import { Spinner } from "@chakra-ui/react";
  
 
 const MyBlog = () => {
-  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+  const BASE_URL=process.env.REACT_APP_API_URL 
  console.log(BASE_URL);
   const [userblogdetail, setUserBlogDetail] = useState([]);
   const [loading, setLoading] = useState(false);

@@ -11,7 +11,7 @@ import {
 import Navbar from "./Navbar";
 
 const Addblog = () => {
-  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+  const BASE_URL=process.env.REACT_APP_API_URL 
   
  
   const [formData, setFormData] = useState({

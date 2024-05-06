@@ -15,7 +15,7 @@ import {
 import Navbar from "./Navbar";
 
 function SignIn() {
-   const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+  const BASE_URL=process.env.REACT_APP_API_URL 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

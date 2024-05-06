@@ -12,7 +12,6 @@ import "../css/home.css";
 
 
 const Sidebar = ({ username, handleSignOut }) => {
-  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
   let obj = {
     fontWeight: "bold",
     fontSize: "1.1rem",

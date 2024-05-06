@@ -8,7 +8,9 @@ import { Spinner } from "@chakra-ui/react";
 
 
 const Home = () => {
-  const BASE_URL='https://blog-backend-hcpk.onrender.com' 
+  const BASE_URL=process.env.REACT_APP_API_URL 
+
+ 
   const [userblogdetail, setUserblogdetail] = useState([]);
   const [username, setusername] = useState("None");
   const [loading, setloading] = useState(false);
