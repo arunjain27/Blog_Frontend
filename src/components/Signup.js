@@ -15,14 +15,13 @@ import { Spinner } from "@chakra-ui/react";
 import Navbar from "./Navbar";
 
 function App() {
-  const BASE_URL=process.env.REACT_APP_API_URL 
+  const BASE_URL = process.env.REACT_APP_API_URL;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-
   let verify = "";
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -31,9 +30,7 @@ function App() {
       setErrorMessage("Please fill in all fields.");
       return;
     }
-
     setIsLoading(true);
-
     try {
       const response = await fetch(`${BASE_URL}/signup`, {
         method: "POST",
@@ -49,7 +46,7 @@ function App() {
       } else {
         setErrorMessage(null);
         const token = await response.json();
-     
+
         localStorage.setItem("token", token.data);
 
         verify = localStorage.getItem("token");
@@ -57,7 +54,6 @@ function App() {
         if (verify) {
           window.location.href = "/";
         } else {
-          
         }
       }
     } catch (error) {

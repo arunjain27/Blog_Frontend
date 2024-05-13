@@ -9,8 +9,6 @@ import {
 import { NavLink } from "react-router-dom";
 import "../css/home.css";
 
-
-
 const Sidebar = ({ username, handleSignOut }) => {
   let obj = {
     fontWeight: "bold",
@@ -24,13 +22,9 @@ const Sidebar = ({ username, handleSignOut }) => {
     fontFamily: "Times New Roman",
     color: "rgb(231, 247, 248)",
   };
-
   const token = localStorage.getItem("token");
-
   let background = "rgb(16, 57, 59)";
-
   const authToken = localStorage.getItem("token");
- 
   return (
     <div>
       <div>
@@ -70,7 +64,6 @@ const Sidebar = ({ username, handleSignOut }) => {
                   ""
                 )}
               </NavLink>
-
               {authToken ? (
                 <CDBSidebarMenuItem
                   icon="chart-line"

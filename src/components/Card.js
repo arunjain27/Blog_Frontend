@@ -24,7 +24,6 @@ function NewCardComponent({
   const handleDelete = () => {
     deletefunction(_id);
   };
-
   const utcDateString = date;
   const indianDateTimeString = new Date(utcDateString).toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
@@ -35,7 +34,6 @@ function NewCardComponent({
     fontFamily: "sans-serif",
     color: "rgb(4, 96, 103)",
   };
-
   return (
     <Card
       direction={{ base: "column", sm: "row" }}

@@ -16,23 +16,18 @@ import Navbar from "./Navbar";
 
 function SignIn() {
   const BASE_URL=process.env.REACT_APP_API_URL 
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (!email || !password) {
       setErrorMessage("Please fill in all fields.");
       return;
     }
-
-    setIsLoading(true);
-
-    try {
+   setIsLoading(true);
+   try {
       const response = await fetch(`${BASE_URL}/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

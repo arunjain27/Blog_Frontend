@@ -9,22 +9,17 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import Navbar from "./Navbar";
-
 const Addblog = () => {
-  const BASE_URL=process.env.REACT_APP_API_URL 
-  
- 
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     tag: "",
     image: null,
   });
-
   const [errorMessage, setErrorMessage] = useState("");
   const [generatedData, setGeneratedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  
   const handleChange = (event) => {
     const { name, value, files } = event.target;
     setFormData((prevData) => ({
@@ -32,7 +27,6 @@ const Addblog = () => {
       [name]: name === "image" ? files[0] : value,
     }));
   };
-
   const handleGenerateAI = async () => {
     setIsLoading(true);
     try {
@@ -47,11 +41,9 @@ const Addblog = () => {
           "Content-Type": "application/json",
         },
       });
-
       if (!response.ok) {
         throw new Error("Failed to generate AI text");
       }
-
       const generatedData = await response.json();
       setGeneratedData(generatedData);
       setFormData({
@@ -62,29 +54,25 @@ const Addblog = () => {
       });
       setErrorMessage("");
     } catch (error) {
-       setErrorMessage("Failed to generate AI text. Please try again later.");
+      setErrorMessage("Failed to generate AI text. Please try again later.");
     } finally {
       setIsLoading(false);
     }
   };
-
   const handleSubmit = async () => {
     setIsLoading(true);
     const token = localStorage.getItem("token");
-
     if (!token) {
       setIsLoading(false);
       setErrorMessage("Please log in to add a blog.");
       return;
     }
-
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
       formDataToSend.append("tag", formData.tag);
       formDataToSend.append("image", formData.image);
-
       const response = await fetch(`${BASE_URL}/blogdetail`, {
         method: "POST",
         headers: {
@@ -92,11 +80,9 @@ const Addblog = () => {
         },
         body: formDataToSend,
       });
-
       if (!response.ok) {
         throw new Error("Failed to submit form data");
       }
-
       window.location.href = "/";
       setErrorMessage("");
       setFormData({
@@ -107,17 +93,14 @@ const Addblog = () => {
       });
       setGeneratedData(null);
     } catch (error) {
-       setErrorMessage("Failed to submit form data. Please try again later.");
+      setErrorMessage("Failed to submit form data. Please try again later.");
     } finally {
       setIsLoading(false);
     }
   };
-
   return (
     <div>
       <Navbar />
-      <h1>Add Blog Page</h1>
-
       {isLoading ? (
         <div
           style={{
@@ -206,5 +189,4 @@ const Addblog = () => {
     </div>
   );
 };
-
 export default Addblog;

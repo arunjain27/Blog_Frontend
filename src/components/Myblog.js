@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import Navbar from "./Navbar";
 import { Spinner } from "@chakra-ui/react";
- 
 
 const MyBlog = () => {
-  const BASE_URL=process.env.REACT_APP_API_URL 
- console.log(BASE_URL);
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log(BASE_URL);
   const [userblogdetail, setUserBlogDetail] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -25,23 +24,20 @@ const MyBlog = () => {
         },
       });
       if (!response.ok) {
-       
         return;
       }
       const blogData = await response.json();
-      
+
       setUserBlogDetail(blogData.userblog);
     } catch (error) {
-      
     } finally {
       setLoading(false);
     }
   }
-
   const handleDelete = async (deleteId) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${BASE_URL}${deleteId}`, {
+      const response = await fetch(`${BASE_URL}/${deleteId}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -54,10 +50,7 @@ const MyBlog = () => {
       setUserBlogDetail((prevState) =>
         prevState.filter((blog) => blog._id !== deleteId)
       );
-    
-    } catch (error) {
-       
-    }
+    } catch (error) {}
   };
 
   return (
