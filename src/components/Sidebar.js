@@ -8,8 +8,9 @@ import {
 } from "cdbreact";
 import { NavLink } from "react-router-dom";
 import "../css/home.css";
+import Cookies from 'js-cookie';
 
-const Sidebar = ({ username, handleSignOut }) => {
+const Sidebar = ({username, handleSignOut }) => {
   let obj = {
     fontWeight: "bold",
     fontSize: "1.1rem",
@@ -22,9 +23,9 @@ const Sidebar = ({ username, handleSignOut }) => {
     fontFamily: "Times New Roman",
     color: "rgb(231, 247, 248)",
   };
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   let background = "rgb(16, 57, 59)";
-  const authToken = localStorage.getItem("token");
+  const authToken = Cookies.get("token");
   return (
     <div>
       <div>

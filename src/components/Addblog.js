@@ -9,6 +9,7 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import Navbar from "./Navbar";
+import Cookies from 'js-cookie';
 const Addblog = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
@@ -61,7 +62,7 @@ const Addblog = () => {
   };
   const handleSubmit = async () => {
     setIsLoading(true);
-    const token = localStorage.getItem("token");
+    const token = Cookies.get("token");
     if (!token) {
       setIsLoading(false);
       setErrorMessage("Please log in to add a blog.");

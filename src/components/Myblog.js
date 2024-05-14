@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "./Card";
 import Navbar from "./Navbar";
 import { Spinner } from "@chakra-ui/react";
+import Cookies from 'js-cookie';
 
 const MyBlog = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
@@ -16,7 +17,7 @@ const MyBlog = () => {
   async function getBlogDetails() {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const response = await fetch(`${BASE_URL}/get`, {
         method: "POST",
         headers: {
@@ -36,7 +37,7 @@ const MyBlog = () => {
   }
   const handleDelete = async (deleteId) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const response = await fetch(`${BASE_URL}/${deleteId}`, {
         method: "DELETE",
         headers: {

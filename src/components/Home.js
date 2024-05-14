@@ -1,34 +1,42 @@
-import React, { useEffect, useState, Suspense } from "react";
+import React, { useEffect, useState, useCallback, Suspense } from "react";
 import "../css/home.css";
 import Sidebar from "./Sidebar";
 import { Spinner } from "@chakra-ui/react";
-import importedComponent from "react-imported-component";
+import Cookies from 'js-cookie';
+
+// Lazy load Card component
+const Card = React.lazy(() => import('./Card'));
 
 const Home = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
 
   const [userblogdetail, setUserblogdetail] = useState([]);
-  const [username, setusername] = useState("None");
-  const [loading, setloading] = useState(false);
-
-  let deletepost = true;
+  const [username, setUsername] = useState("none");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getBlogDetails();
+    const cachedBlogs = JSON.parse(localStorage.getItem("cachedBlogs"));
+    if (cachedBlogs) {
+      setUserblogdetail(cachedBlogs);
+    }
   }, []);
 
+  useEffect(() => {
+    if (userblogdetail.length === 0) {
+      getBlogDetails();
+    }
+  }, [userblogdetail]);
+
   const handleSignOut = () => {
-    localStorage.removeItem("token");
-    setusername("none");
+    Cookies.remove("token");
+    Cookies.remove("username");
+    setUsername("None");
   };
 
-  async function getBlogDetails() {
+  const getBlogDetails = useCallback(async () => {
     try {
-      setloading(true);
-      let token = localStorage.getItem("token");
-      if (!token) {
-        token = "";
-      }
+      setLoading(true);
+      let token = Cookies.get("token") || "";
       const response = await fetch(`${BASE_URL}/allpost`, {
         method: "POST",
         headers: {
@@ -41,17 +49,18 @@ const Home = () => {
       }
 
       const blogData = await response.json();
-      setloading(false);
-      setusername(blogData.username);
+      localStorage.setItem("cachedBlogs", JSON.stringify(blogData.userblog)); // Cache fetched data
+      setLoading(false);
+      setUsername(blogData.username);
       setUserblogdetail(blogData.userblog);
-    } catch (error) {}
-  }
-
-  const CardComponent = importedComponent(() => import('./Card'));
+    } catch (error) {
+      console.error("Error fetching blog posts:", error);
+    }
+  }, [BASE_URL]);
 
   const handleDelete = async (deleteId) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = Cookies.get("token");
       const response = await fetch(`${BASE_URL}/${deleteId}`, {
         method: "DELETE",
         headers: {
@@ -63,16 +72,17 @@ const Home = () => {
         throw new Error("Failed to delete post");
       }
       setUserblogdetail(userblogdetail.filter((blog) => blog.key !== deleteId));
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error deleting post:", error);
+    }
   };
 
   return (
     <>
       <div className="home-head">
-        <div>
-          <Sidebar username={username} handleSignOut={handleSignOut} />
-        </div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Sidebar username={username} handleSignOut={handleSignOut} />
+        
+        <div className="home-head-inner2">
           {loading ? (
             <div style={{ marginRight: "40%" }}>
               <Spinner
@@ -84,10 +94,10 @@ const Home = () => {
               />
             </div>
           ) : (
-            <div className="home-head-inner2">
+            <Suspense fallback={<div>Loading...</div>}>
               {userblogdetail.map((blog) => (
                 <div key={blog._id} className="home-head-inner2-card">
-                  <CardComponent
+                  <Card
                     _id={blog._id}
                     name={blog.name}
                     title={blog.title}
@@ -96,13 +106,12 @@ const Home = () => {
                     image={blog.image}
                     date={blog.date}
                     deletefunction={handleDelete}
-                    deletepost={deletepost}
                   />
                 </div>
               ))}
-            </div>
+            </Suspense>
           )}
-        </Suspense>
+        </div>
       </div>
     </>
   );

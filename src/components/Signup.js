@@ -13,6 +13,8 @@ import {
 } from "mdb-react-ui-kit";
 import { Spinner } from "@chakra-ui/react";
 import Navbar from "./Navbar";
+import Cookies from 'js-cookie';
+
 
 function App() {
   const BASE_URL = process.env.REACT_APP_API_URL;
@@ -47,9 +49,9 @@ function App() {
         setErrorMessage(null);
         const token = await response.json();
 
-        localStorage.setItem("token", token.data);
-
-        verify = localStorage.getItem("token");
+        Cookies.set("token", token.data);
+        Cookies.set("username", token.username); 
+        verify = Cookies.get("token");
 
         if (verify) {
           window.location.href = "/";
@@ -63,7 +65,7 @@ function App() {
     }
   };
 
-  return (
+  return ( 
     <>
       <Navbar />
       {verify}

@@ -13,7 +13,7 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import Navbar from "./Navbar";
-
+import Cookies from 'js-cookie';
 function SignIn() {
   const BASE_URL=process.env.REACT_APP_API_URL 
   const [email, setEmail] = useState("");
@@ -41,11 +41,14 @@ function SignIn() {
         );
       } else {
         const tokenData = await response.json();
+        console.log(tokenData); 
         const token = tokenData.data;
+        const user = tokenData.username;
+
         // console.log(token);
         // Store the token in local storage
-        localStorage.setItem("token", token);
-
+        Cookies.set("token", token);
+        Cookies.set("username", user);
         window.location.href = "/";
         // Redirect the user to the home page
       }

@@ -3,11 +3,11 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import { NavLink } from "react-router-dom";
-
+import Cookies from 'js-cookie';
 function App() {
   const [openNav, setOpenNav] = useState(false);
   const toggleNav = () => setOpenNav(!openNav);
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
       <Container fluid>
