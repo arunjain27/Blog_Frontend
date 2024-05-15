@@ -50,7 +50,7 @@ function App() {
         const token = await response.json();
 
         Cookies.set("token", token.data);
-        Cookies.set("username", token.username); 
+        Cookies.set("username", name); 
         verify = Cookies.get("token");
 
         if (verify) {
@@ -67,7 +67,7 @@ function App() {
 
   return ( 
     <>
-      <Navbar />
+   
       {verify}
       <MDBContainer
         fluid

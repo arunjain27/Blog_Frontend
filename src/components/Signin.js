@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-// Import useHistory hook to handle navigation
 import "../css/signup.css";
 import {
   MDBBtn,
@@ -13,9 +12,9 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import Navbar from "./Navbar";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 function SignIn() {
-  const BASE_URL=process.env.REACT_APP_API_URL 
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -26,8 +25,8 @@ function SignIn() {
       setErrorMessage("Please fill in all fields.");
       return;
     }
-   setIsLoading(true);
-   try {
+    setIsLoading(true);
+    try {
       const response = await fetch(`${BASE_URL}/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,16 +40,13 @@ function SignIn() {
         );
       } else {
         const tokenData = await response.json();
-        console.log(tokenData); 
+        console.log(tokenData);
         const token = tokenData.data;
         const user = tokenData.username;
 
-        // console.log(token);
-        // Store the token in local storage
         Cookies.set("token", token);
         Cookies.set("username", user);
         window.location.href = "/";
-        // Redirect the user to the home page
       }
     } catch (error) {
       setErrorMessage("An error occurred. Please try again later.");
@@ -61,7 +57,6 @@ function SignIn() {
 
   return (
     <>
-      <Navbar />
       <MDBContainer
         fluid
         className="p-4 background-radial-gradient overflow-hidden"

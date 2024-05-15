@@ -1,8 +1,7 @@
 .home-head {
   height: auto;
   background-color: rgb(255, 255, 255);
-  display: flex;
-  justify-content: space-between;
+ 
   background: linear-gradient(
     90deg,
     rgba(214, 243, 236, 1) 0%,
@@ -23,7 +22,7 @@
     rgba(214, 243, 236, 1) 0%,
     rgba(255, 252, 252, 1) 0%,
     rgba(247, 247, 247, 1) 0%,
-    rgba(208, 255, 247, 1) 1%,
+    rgb(113, 247, 224) 1%,
     rgba(0, 153, 127, 1) 3%,
     rgba(244, 248, 247, 1) 100%,
     rgba(244, 248, 247, 1) 100%
@@ -37,7 +36,8 @@
 }
 
 .home-head-inner2-card {
-  margin-top: 4%;
+  margin-top: 2%;
+  
 }
 
 .home-head-inner3 {

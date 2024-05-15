@@ -2,17 +2,16 @@ import React, { useEffect, useState, useCallback, Suspense } from "react";
 import "../css/home.css";
 import Sidebar from "./Sidebar";
 import { Spinner } from "@chakra-ui/react";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
-// Lazy load Card component
-const Card = React.lazy(() => import('./Card'));
+const Card = React.lazy(() => import("./Card"));
 
 const Home = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
-
   const [userblogdetail, setUserblogdetail] = useState([]);
   const [username, setUsername] = useState("none");
   const [loading, setLoading] = useState(false);
+  let deletepost = true;
 
   useEffect(() => {
     const cachedBlogs = JSON.parse(localStorage.getItem("cachedBlogs"));
@@ -26,12 +25,6 @@ const Home = () => {
       getBlogDetails();
     }
   }, [userblogdetail]);
-
-  const handleSignOut = () => {
-    Cookies.remove("token");
-    Cookies.remove("username");
-    setUsername("None");
-  };
 
   const getBlogDetails = useCallback(async () => {
     try {
@@ -79,40 +72,36 @@ const Home = () => {
 
   return (
     <>
-      <div className="home-head">
-        <Sidebar username={username} handleSignOut={handleSignOut} />
-        
-        <div className="home-head-inner2">
-          {loading ? (
-            <div style={{ marginRight: "40%" }}>
-              <Spinner
-                thickness="4px"
-                speed="0.65s"
-                emptyColor="gray.200"
-                color="blue.500"
-                size="xl"
-              />
-            </div>
-          ) : (
-            <Suspense fallback={<div>Loading...</div>}>
-              {userblogdetail.map((blog) => (
-                <div key={blog._id} className="home-head-inner2-card">
-                  <Card
-                    _id={blog._id}
-                    name={blog.name}
-                    title={blog.title}
-                    tag={blog.tag}
-                    description={blog.description}
-                    image={blog.image}
-                    date={blog.date}
-                    deletefunction={handleDelete}
-                  />
-                </div>
-              ))}
-            </Suspense>
-          )}
+      {loading ? (
+        <Spinner
+          thickness="8px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+          style={{ marginLeft: "50%" }}
+        />
+      ) : (
+        <div className="home-head">
+          <Suspense fallback={<div>Loading...</div>}>
+            {userblogdetail.map((blog) => (
+              <div key={blog._id} className="home-head-inner2-card">
+                <Card
+                  _id={blog._id}
+                  name={blog.name}
+                  title={blog.title}
+                  tag={blog.tag}
+                  description={blog.description}
+                  image={blog.image}
+                  date={blog.date}
+                  deletefunction={handleDelete}
+                  deletepost={deletepost}
+                />
+              </div>
+            ))}
+          </Suspense>
         </div>
-      </div>
+      )}
     </>
   );
 };

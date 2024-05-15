@@ -101,7 +101,7 @@ const Addblog = () => {
   };
   return (
     <div>
-      <Navbar />
+    
       {isLoading ? (
         <div
           style={{

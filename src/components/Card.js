@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Card,
   CardBody,
@@ -47,7 +48,7 @@ function NewCardComponent({
     >
       <Image
         objectFit="contain"
-        maxW={{ base: "100%", sm: "160px" }}
+        maxW={{ base: "100%", sm: "200px" }}
         src={image}
         alt={title}
         style={{ boxShadow: "1px 1px 2px darkgreen" }}
@@ -105,7 +106,14 @@ function NewCardComponent({
           </Text>
         </CardBody>
         <CardFooter>
-          <Button variant="solid">{name}</Button>
+          <Button variant="solid">
+            <span
+              style={{ fontWeight: "600", fontSize: "0.8rem", color: "grey" }}
+            >
+              Posted by:{" "}
+            </span>
+            {name}
+          </Button>
           {deletepost ? (
             " "
           ) : (

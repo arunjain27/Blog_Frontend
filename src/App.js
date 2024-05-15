@@ -5,12 +5,13 @@ import Signup from "./components/Signup";
 import Signin from "./components/Signin";
 import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "../src/components/Navbar";
 function App() {
   return (
     <>
       <ChakraProvider>
         <BrowserRouter>
-          <Routes></Routes>
+          <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/myblog" element={<Myblog />} />
@@ -18,7 +19,6 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<Signin />} />
           </Routes>
-          {/* <Footer/> */}
         </BrowserRouter>
       </ChakraProvider>
     </>

@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import Navbar from "./Navbar";
-import { Spinner } from "@chakra-ui/react";
-import Cookies from 'js-cookie';
 
+import { Spinner } from "@chakra-ui/react";
+import Cookies from "js-cookie";
+import Alert from "./Alert";
 const MyBlog = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
   console.log(BASE_URL);
   const [userblogdetail, setUserBlogDetail] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getBlogDetails();
   }, []);
 
   async function getBlogDetails() {
-    setLoading(true);
     try {
       const token = Cookies.get("token");
       const response = await fetch(`${BASE_URL}/get`, {
@@ -30,10 +29,8 @@ const MyBlog = () => {
       const blogData = await response.json();
 
       setUserBlogDetail(blogData.userblog);
-    } catch (error) {
-    } finally {
-      setLoading(false);
-    }
+     setLoading(false);
+    } catch (error) {}
   }
   const handleDelete = async (deleteId) => {
     try {
@@ -51,28 +48,14 @@ const MyBlog = () => {
       setUserBlogDetail((prevState) =>
         prevState.filter((blog) => blog._id !== deleteId)
       );
+      
     } catch (error) {}
   };
 
   return (
     <>
-      <Navbar />
-      {loading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
-        </div>
+      {loading? (
+        <Alert />
       ) : (
         <div>
           {userblogdetail.map((blog) => (

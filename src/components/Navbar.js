@@ -3,11 +3,21 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import { NavLink } from "react-router-dom";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 function App() {
-  const [openNav, setOpenNav] = useState(false);
-  const toggleNav = () => setOpenNav(!openNav);
   const token = Cookies.get("token");
+  const user = Cookies.get("username");
+
+  const [checktoken, setchecktoken] = useState(token);
+  const [username, setUsername] = useState(user);
+
+  const handleSignOut = () => {
+    Cookies.remove("token");
+    Cookies.remove("username");
+    setchecktoken("");
+    window.location.href = "/Myblog";
+    setUsername("None");
+  };
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
       <Container fluid>
@@ -26,16 +36,39 @@ function App() {
             <Nav.Link as={NavLink} to="/Myblog" activeClassName="active">
               MyBlog
             </Nav.Link>
-            {token && (
-              <Nav.Link as={NavLink} to="/Addblog" activeClassName="active">
-                Addblog
-              </Nav.Link>
+            {checktoken ? (
+              <>
+                <Nav.Link as={NavLink} to="/Addblog" activeClassName="active">
+                  Addblog
+                </Nav.Link>
+                <Nav.Link
+                  as={NavLink}
+                  to="/signout"
+                  activeClassName="active"
+                  onClick={handleSignOut}
+                >
+                  Signout
+                </Nav.Link>
+              </>
+            ) : (
+              <>
+                <Nav.Link as={NavLink} to="/Signin" activeClassName="active">
+                  Signin
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/Signup" activeClassName="active">
+                  Signup
+                </Nav.Link>
+              </>
             )}
-            <Nav.Link as={NavLink} to="/Signin" activeClassName="active">
-              Signin
-            </Nav.Link>
-            <Nav.Link as={NavLink} to="/Signup" activeClassName="active">
-              Signup
+
+            <Nav.Link
+              style={{
+                marginLeft: "30px",
+                color: "lightblue",
+                fontWeight: "500",
+              }}
+            >
+              Signed in as :{username}
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
