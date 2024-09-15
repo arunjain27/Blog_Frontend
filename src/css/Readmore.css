@@ -1,0 +1,20 @@
+.read-more-link {
+    display: inline-block;
+    background-color: #3498db; /* Primary button color */
+    color: white; /* Text color */
+    padding: 8px 16px; /* Padding for better spacing */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 16px; /* Font size for readability */
+    font-weight: bold; /* Bold text for emphasis */
+    text-decoration: none; /* Remove underline */
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    margin-top: 10px; /* Spacing from other content */
+  }
+  
+  .read-more-link:hover {
+    background-color: #2ee38f; /* Darker color on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for a 3D effect */
+    color: white; /* Ensure text remains white on hover */
+    text-decoration: none; /* Keep underline removed */
+  }
+  

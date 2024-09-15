@@ -8,10 +8,9 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBCheckbox,
+ 
   MDBIcon,
 } from "mdb-react-ui-kit";
-import Navbar from "./Navbar";
 import Cookies from "js-cookie";
 function SignIn() {
   const BASE_URL = process.env.REACT_APP_API_URL;
@@ -46,6 +45,8 @@ function SignIn() {
 
         Cookies.set("token", token);
         Cookies.set("username", user);
+        Cookies.set("userid",tokenData.userid);
+
         window.location.href = "/";
       }
     } catch (error) {

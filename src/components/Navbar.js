@@ -1,23 +1,26 @@
-import React, { useState } from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/Container";
-import { NavLink } from "react-router-dom";
-import Cookies from "js-cookie";
-function App() {
-  const token = Cookies.get("token");
-  const user = Cookies.get("username");
+import React, { useState, useEffect } from 'react';
+import {Navbar,Container,Nav} from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import "../css/home.css";
 
-  const [checktoken, setchecktoken] = useState(token);
-  const [username, setUsername] = useState(user);
+function NavScrollExample() {
+  const [username, setUsername] = useState(Cookies.get('username'));
+  const [token, setToken] = useState(Cookies.get('token'));
+
+  useEffect(() => {
+    setUsername(Cookies.get('username'));
+    setToken(Cookies.get('token'));
+  }, []);
 
   const handleSignOut = () => {
-    Cookies.remove("token");
-    Cookies.remove("username");
-    setchecktoken("");
-    window.location.href = "/Myblog";
-    setUsername("None");
+    Cookies.remove('token');
+    Cookies.remove('username');
+    setToken('');
+    setUsername('');
+    window.location.href = '/';
   };
+
   return (
     <Navbar expand="lg" bg="dark" variant="dark">
       <Container fluid>
@@ -30,23 +33,26 @@ function App() {
             Musingsss
           </NavLink>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Collapse id="navbarScroll">
+          <Nav
+            className="me-auto my-2 my-lg-0"
+            style={{ maxHeight: '100px' }}
+            navbarScroll
+          >
+             <Nav.Link as={NavLink} to="/Allblog" activeClassName="active">
+              AllBlog
+            </Nav.Link>
             <Nav.Link as={NavLink} to="/Myblog" activeClassName="active">
               MyBlog
             </Nav.Link>
-            {checktoken ? (
+            {token ? (
               <>
                 <Nav.Link as={NavLink} to="/Addblog" activeClassName="active">
                   Addblog
                 </Nav.Link>
-                <Nav.Link
-                  as={NavLink}
-                  to="/signout"
-                  activeClassName="active"
-                  onClick={handleSignOut}
-                >
+               
+                <Nav.Link as={NavLink} to="/signout" activeClassName="active" onClick={handleSignOut}>
                   Signout
                 </Nav.Link>
               </>
@@ -60,21 +66,21 @@ function App() {
                 </Nav.Link>
               </>
             )}
-
-            <Nav.Link
-              style={{
-                marginLeft: "30px",
-                color: "lightblue",
-                fontWeight: "500",
-              }}
-            >
-              Signed in as :{username}
-            </Nav.Link>
           </Nav>
+         
+          <span
+            style={{
+            
+              color: "lightblue",
+              fontWeight: "500",
+            }}
+          >
+            Signed in as: {username ? username : "Guest"}
+          </span>
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 }
 
-export default App;
+export default NavScrollExample;

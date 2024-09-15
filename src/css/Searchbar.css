@@ -1,0 +1,57 @@
+/* Styles for the search bar */
+.search-bar {
+    margin: 20px auto;
+    text-align: center;
+    position: relative;
+  }
+  
+  .search-bar input {
+    width: 350px;
+    padding: 12px 40px; /* Space for the search icon */
+    border: 2px solid transparent;
+    border-radius: 25px;
+    font-size: 18px;
+    background-color: #fcfcfc;
+    transition: all 0.3s ease-in-out;
+    color: #333;
+    outline: none; /* Remove default focus border */
+  }
+  
+  .search-bar input:focus {
+    border-color: #007BFF;  /* Blue border on focus */
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
+  }
+  
+  .search-bar input::placeholder {
+    color: #aaa;
+    font-style: italic;
+  }
+  
+  .search-bar input:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .search-bar input:focus::placeholder {
+    color: transparent; /* Hide placeholder on focus */
+  }
+  
+  /* Search icon styling */
+  .search-bar .search-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: #151414;
+    pointer-events: none; /* Prevent interaction with the icon */
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .search-bar input:focus + .search-icon {
+    color: #007BFF;  /* Icon turns blue when focused */
+  }
+  
+  .search-bar input:hover + .search-icon {
+    color: #333;
+  }
+  

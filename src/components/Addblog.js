@@ -8,8 +8,8 @@ import {
   FormHelperText,
   Spinner,
 } from "@chakra-ui/react";
-import Navbar from "./Navbar";
 import Cookies from 'js-cookie';
+
 const Addblog = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
   const [formData, setFormData] = useState({
@@ -21,6 +21,7 @@ const Addblog = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [generatedData, setGeneratedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
   const handleChange = (event) => {
     const { name, value, files } = event.target;
     setFormData((prevData) => ({
@@ -28,6 +29,7 @@ const Addblog = () => {
       [name]: name === "image" ? files[0] : value,
     }));
   };
+
   const handleGenerateAI = async () => {
     setIsLoading(true);
     try {
@@ -42,17 +44,19 @@ const Addblog = () => {
           "Content-Type": "application/json",
         },
       });
+
       if (!response.ok) {
         throw new Error("Failed to generate AI text");
       }
-      const generatedData = await response.json();
-      setGeneratedData(generatedData);
-      setFormData({
-        ...formData,
-        title: generatedData.generatedTitle,
-        tag: generatedData.generatedTag,
-        description: generatedData.generatedDescription,
-      });
+
+      const data = await response.json();
+      setGeneratedData(data);
+      setFormData((prevData) => ({
+        ...prevData,
+        title: data.generatedTitle,
+        tag: data.generatedTag,
+        description: data.generatedDescription,
+      }));
       setErrorMessage("");
     } catch (error) {
       setErrorMessage("Failed to generate AI text. Please try again later.");
@@ -60,20 +64,24 @@ const Addblog = () => {
       setIsLoading(false);
     }
   };
+
   const handleSubmit = async () => {
     setIsLoading(true);
     const token = Cookies.get("token");
+
     if (!token) {
       setIsLoading(false);
       setErrorMessage("Please log in to add a blog.");
       return;
     }
+
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("title", formData.title);
       formDataToSend.append("description", formData.description);
       formDataToSend.append("tag", formData.tag);
       formDataToSend.append("image", formData.image);
+
       const response = await fetch(`${BASE_URL}/blogdetail`, {
         method: "POST",
         headers: {
@@ -81,9 +89,11 @@ const Addblog = () => {
         },
         body: formDataToSend,
       });
+
       if (!response.ok) {
         throw new Error("Failed to submit form data");
       }
+
       window.location.href = "/";
       setErrorMessage("");
       setFormData({
@@ -99,31 +109,17 @@ const Addblog = () => {
       setIsLoading(false);
     }
   };
+
   return (
     <div>
-    
       {isLoading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-          />
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
         </div>
       ) : (
         <div>
           <FormControl>
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>
-              Title
-            </FormLabel>
+            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Title</FormLabel>
             <Input
               type="text"
               name="title"
@@ -132,9 +128,7 @@ const Addblog = () => {
               onChange={handleChange}
               style={{ backgroundColor: "rgb(249, 249, 249)" }}
             />
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>
-              Description
-            </FormLabel>
+            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Description</FormLabel>
             <Textarea
               type="text"
               name="description"
@@ -143,9 +137,7 @@ const Addblog = () => {
               onChange={handleChange}
               style={{ backgroundColor: "rgb(249, 249, 249)" }}
             />
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>
-              Tag
-            </FormLabel>
+            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Tag</FormLabel>
             <Input
               type="text"
               name="tag"
@@ -154,22 +146,11 @@ const Addblog = () => {
               onChange={handleChange}
               style={{ backgroundColor: "rgb(249, 249, 249)" }}
             />
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>
-              Upload Image
-            </FormLabel>
-            <Input
-              type="file"
-              name="image"
-              onChange={handleChange}
-              style={{ backgroundColor: "rgb(249, 249, 249)" }}
-            />
+            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Upload Image</FormLabel>
+            <Input type="file" name="image" onChange={handleChange} style={{ backgroundColor: "rgb(249, 249, 249)" }} />
             <FormHelperText>We'll never share your email.</FormHelperText>
-            <Button type="button" onClick={handleGenerateAI}>
-              Generate AI Text
-            </Button>
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>
-              Generated Text
-            </FormLabel>
+            <Button type="button" onClick={handleGenerateAI}>Generate AI Text</Button>
+            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Generated Text</FormLabel>
             <Textarea
               type="text"
               name="generatedText"
@@ -177,12 +158,7 @@ const Addblog = () => {
               readOnly
               style={{ backgroundColor: "rgb(249, 249, 249)" }}
             />
-            <Button type="button" onClick={handleSubmit}>
-              Submit Blog
-            </Button>
-            {/* Spinner */}
-
-            {/* Error message */}
+            <Button type="button" onClick={handleSubmit}>Submit Blog</Button>
             {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
           </FormControl>
         </div>
@@ -190,4 +166,5 @@ const Addblog = () => {
     </div>
   );
 };
+
 export default Addblog;

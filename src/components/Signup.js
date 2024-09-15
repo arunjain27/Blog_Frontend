@@ -8,11 +8,10 @@ import {
   MDBCard,
   MDBCardBody,
   MDBInput,
-  MDBCheckbox,
   MDBIcon,
 } from "mdb-react-ui-kit";
 import { Spinner } from "@chakra-ui/react";
-import Navbar from "./Navbar";
+
 import Cookies from 'js-cookie';
 
 
@@ -51,6 +50,7 @@ function App() {
 
         Cookies.set("token", token.data);
         Cookies.set("username", name); 
+        Cookies.set("userid",token.userid);
         verify = Cookies.get("token");
 
         if (verify) {
