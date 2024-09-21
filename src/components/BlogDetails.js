@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import "../css/BlogDetails.css"; // Updated CSS
-
+import { Box } from '@chakra-ui/react'
 const BlogDetails = () => {
   const { id } = useParams();
   const BASE_URL = process.env.REACT_APP_API_URL;
@@ -12,7 +12,7 @@ const BlogDetails = () => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedCommentText, setEditedCommentText] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const check=Cookies.get("token");
   // Fetch blog details and comments on load
   useEffect(() => {
     const fetchBlogDetails = async () => {
@@ -205,6 +205,8 @@ const BlogDetails = () => {
         <p>Loading...</p>
       ) : (
         <>
+         {check? "":<Box bg='red' w='100%' p={4} color='white'>
+         "Please Login or Sign Up to add a blog, like, or comment on posts and engage with our community!"</Box>}
           {blog && (
             <div className="blog-detail">
               <h1>{blog.title}</h1>
