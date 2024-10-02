@@ -1,7 +1,9 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
-import Intro_1 from '../images/Intro_1.jpg';
-import Intro_2 from '../images/Intro_2.jpg';
+import Intro_1 from '../images/Intro_1 - Copy.webp';
+import Intro_1_2x from '../images/Intro_1@2x.webp';  // For high-density screens (2x)
+import Intro_2 from '../images/Intro_2 - Copy.webp';
+import Intro_2_2x from '../images/Intro_2@2x.webp';  // For high-density screens (2x)
 
 const ContentWithImageContainer = styled.section`
   display: flex;
@@ -10,8 +12,8 @@ const ContentWithImageContainer = styled.section`
   background-color: #f9f9f9;
   border-radius: 10px;
   overflow: hidden;
-  height: 60vh;
-
+  height: 60vh; 
+ 
   @media (max-width: 768px) {
     flex-direction: column;
     height: 40vh;
@@ -41,6 +43,9 @@ const ImageWrapper = styled.div`
     width: 100%;
     height: auto;
     border-radius: 10px;
+    
+    aspect-ratio: 16 / 9; // Maintain a 16:9 aspect ratio
+
     object-fit: cover;
   }
 `;
@@ -48,12 +53,14 @@ const ImageWrapper = styled.div`
 const ContentWithImage = memo(() => {
   const IntroObj = [
     {
-      image: Intro_1,
+      imageSrc: Intro_1,
+      imageSrcSet: `${Intro_1} 1x, ${Intro_1_2x} 2x`,
       heading: 'Join the Conversation: Share Your Expertise and Experiences',
       paragraph: 'Express your thoughts, share your knowledge, and inspire others by joining our community of bloggers. Your voice matters here!',
     },
     {
-      image: Intro_2,
+      imageSrc: Intro_2,
+      imageSrcSet: `${Intro_2} 1x, ${Intro_2_2x} 2x`,
       heading: 'Become a Blogging Star: Share Your Thoughts with the World',
       paragraph: 'Reach out to a wider audience and connect with readers who share your interests. Start publishing your blogs today!',
     },
@@ -62,13 +69,24 @@ const ContentWithImage = memo(() => {
   return (
     <>
       {IntroObj.map((slide, index) => (
-        <ContentWithImageContainer key={index} style={{ backgroundColor: 'rgb(235, 244, 245)', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)'}}>
+        <ContentWithImageContainer
+          key={index}
+          style={{
+            backgroundColor: 'rgb(235, 244, 245)',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          }}
+        >
           <Content>
             <h2>{slide.heading}</h2>
             <p>{slide.paragraph}</p>
           </Content>
           <ImageWrapper>
-            <img src={slide.image} alt={`Blog ${index + 1}`} />
+            <img
+              src={slide.imageSrc} 
+              srcSet={slide.imageSrcSet}
+              alt={`Blog ${index + 1}`}
+              loading="lazy"
+            />
           </ImageWrapper>
         </ContentWithImageContainer>
       ))}

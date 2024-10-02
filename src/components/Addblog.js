@@ -75,6 +75,13 @@ const Addblog = () => {
       return;
     }
 
+    // Validate form fields
+    if (!formData.title || !formData.description || !formData.tag || !formData.image) {
+      setIsLoading(false);
+      setErrorMessage("All fields are required.");
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
       formDataToSend.append("title", formData.title);
@@ -90,8 +97,11 @@ const Addblog = () => {
         body: formDataToSend,
       });
 
+      console.log(response); 
       if (!response.ok) {
-        throw new Error("Failed to submit form data");
+        const errorData = await response.json();
+        
+        throw new Error(errorData.message || "Failed to submit form data");
       }
 
       window.location.href = "/";
@@ -130,7 +140,6 @@ const Addblog = () => {
             />
             <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Description</FormLabel>
             <Textarea
-              type="text"
               name="description"
               placeholder="Enter the description"
               value={formData.description}
@@ -147,12 +156,16 @@ const Addblog = () => {
               style={{ backgroundColor: "rgb(249, 249, 249)" }}
             />
             <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Upload Image</FormLabel>
-            <Input type="file" name="image" onChange={handleChange} style={{ backgroundColor: "rgb(249, 249, 249)" }} />
-            <FormHelperText>We'll never share your email.</FormHelperText>
+            <Input
+              type="file"
+              name="image"
+              onChange={handleChange}
+              style={{ backgroundColor: "rgb(249, 249, 249)" }}
+            />
+            <FormHelperText>We'll never share your data.</FormHelperText>
             <Button type="button" onClick={handleGenerateAI}>Generate AI Text</Button>
             <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Generated Text</FormLabel>
             <Textarea
-              type="text"
               name="generatedText"
               value={generatedData ? generatedData.generatedDescription : ""}
               readOnly

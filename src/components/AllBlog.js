@@ -28,6 +28,8 @@ const Home = () => {
       const response = await fetch(`${BASE_URL}/allpost`, {
         method: "POST",
         headers: { "auth-token": token },
+        credentials: 'include',  // This will include the cookies (for CORS)
+
         signal,
       });
 
