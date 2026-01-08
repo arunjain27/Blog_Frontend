@@ -1,20 +1,36 @@
+/* ============================================
+   READ MORE LINK STYLES
+   ============================================ */
+
 .read-more-link {
-    display: inline-block;
-    background-color: #3498db; /* Primary button color */
-    color: white; /* Text color */
-    padding: 8px 16px; /* Padding for better spacing */
-    border-radius: 5px; /* Rounded corners */
-    font-size: 16px; /* Font size for readability */
-    font-weight: bold; /* Bold text for emphasis */
-    text-decoration: none; /* Remove underline */
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    margin-top: 10px; /* Spacing from other content */
+  display: inline-block;
+  background-color: #3498db;
+  color: var(--text-light);
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition-base);
+  margin-top: 0.75rem;
+}
+
+.read-more-link:hover {
+  background-color: #2ee38f;
+  box-shadow: var(--shadow-md);
+  color: var(--text-light);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.read-more-link:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .read-more-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
   }
-  
-  .read-more-link:hover {
-    background-color: #2ee38f; /* Darker color on hover */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow for a 3D effect */
-    color: white; /* Ensure text remains white on hover */
-    text-decoration: none; /* Keep underline removed */
-  }
+}
   

@@ -1,78 +1,61 @@
 import React from 'react';
-import {
-  MDBFooter,
-  MDBContainer,
-  MDBIcon,
-  MDBBtn
-} from 'mdb-react-ui-kit';
+import '../css/footer.css';
 
-export default function App() {
+export default function Footer() {
   return (
-    <MDBFooter className='bg-light text-center text-black'style={{marginTop:'6%'}}>
-      <MDBContainer className='p-4 pb-0'>
-        <section className='mb-4'>
-          <MDBBtn
-            floating
-            className='m-1'
-            style={{ backgroundColor: '#3b5998' }}
-            href='https://www.facebook.com/profile.php?id=100009855137195'
-            target='_blank'
-            role='button'
+    <footer className="footer">
+      <div className="footer-container">
+        <div className="footer-social">
+          <a
+            href="https://www.facebook.com/profile.php?id=100009855137195"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-social-link facebook"
+            aria-label="Facebook"
           >
-            <MDBIcon fab icon='facebook-f' />
-          </MDBBtn>
-
-          <MDBBtn
-            floating
-            className='m-1'
-            style={{ backgroundColor: '#55acee' }}
-            href='https://x.com/arunjain2002'
-            target='_blank'
-            role='button'
+            <i className="fab fa-facebook-f"></i>
+          </a>
+          <a
+            href="https://x.com/arunjain2002"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-social-link twitter"
+            aria-label="Twitter"
           >
-            <MDBIcon fab icon='twitter' />
-          </MDBBtn>
-
-    
-          <MDBBtn
-            floating
-            className='m-1'
-            style={{ backgroundColor: '#ac2bac' }}
-            href='https://www.instagram.com/arunjain2704/'
-            target='_blank'
-            role='button'
+            <i className="fab fa-twitter"></i>
+          </a>
+          <a
+            href="https://www.instagram.com/arunjain2704/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-social-link instagram"
+            aria-label="Instagram"
           >
-            <MDBIcon fab icon='instagram' />
-          </MDBBtn>
-
-          <MDBBtn
-            floating
-            className='m-1'
-            style={{ backgroundColor: '#0082ca' }}
-            href='https://www.linkedin.com/in/arunjain27'
-            target='_blank'
-            role='button'
+            <i className="fab fa-instagram"></i>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/arunjain27"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-social-link linkedin"
+            aria-label="LinkedIn"
           >
-            <MDBIcon fab icon='linkedin-in' />
-          </MDBBtn>
-
-          <MDBBtn
-            floating
-            className='m-1'
-            style={{ backgroundColor: '#333333' }}
-            href='https://github.com/arunjain27'
-            target='_blank'
-            role='button'
+            <i className="fab fa-linkedin-in"></i>
+          </a>
+          <a
+            href="https://github.com/arunjain27"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-social-link github"
+            aria-label="GitHub"
           >
-            <MDBIcon fab icon='github' />
-          </MDBBtn>
-        </section>
-      </MDBContainer>
-
-      <div className='text-center p-3' style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
-        Musingsss : share your thoughts 
-      
+            <i className="fab fa-github"></i>
+          </a>
+        </div>
+        <div className="footer-text">
+          Musingsss : share your thoughts
+        </div>
       </div>
-    </MDBFooter>
+    </footer>
   );
 }

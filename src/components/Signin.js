@@ -1,23 +1,14 @@
 import React, { useState } from "react";
-import "../css/signup.css";
-import {
-  MDBBtn,
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCardBody,
-  MDBInput,
- 
-  MDBIcon,
-} from "mdb-react-ui-kit";
+import "../css/auth.css";
 import Cookies from "js-cookie";
+
 function SignIn() {
   const BASE_URL = process.env.REACT_APP_API_URL;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!email || !password) {
@@ -25,10 +16,12 @@ function SignIn() {
       return;
     }
     setIsLoading(true);
+    setErrorMessage(null);
+    
     try {
       const response = await fetch(`${BASE_URL}/signin`, {
         method: "POST",
-         headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
@@ -37,129 +30,88 @@ function SignIn() {
         setErrorMessage(
           errorData.message || "Sign in failed. Please try again."
         );
+        setIsLoading(false);
       } else {
         const tokenData = await response.json();
-        console.log(tokenData);
         const token = tokenData.data;
         const user = tokenData.username;
 
         Cookies.set("token", token);
         Cookies.set("username", user);
-        Cookies.set("userid",tokenData.userid);
+        Cookies.set("userid", tokenData.userid);
 
         window.location.href = "/";
       }
     } catch (error) {
       setErrorMessage("An error occurred. Please try again later.");
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <>
-      <MDBContainer
-        fluid
-        className="p-4 background-radial-gradient overflow-hidden"
-        style={{ height: "100vh" }}
-      >
-        <MDBRow>
-          <MDBCol
-            md="6"
-            className="text-center text-md-start d-flex flex-column justify-content-center"
-          >
-            <h1
-              className="my-5 display-3 fw-bold ls-tight px-3"
-              style={{ color: "hsl(218, 81%, 95%)" }}
+    <div className="auth-container">
+      <div className="auth-background-shape auth-shape-1"></div>
+      <div className="auth-background-shape auth-shape-2"></div>
+      <div className="auth-content">
+        <div className="auth-welcome">
+          <h1>
+            Welcome Back to Your <br />
+            <span>Blogging Oasis</span>
+          </h1>
+          <p>Sign In and Let Your Ideas Blossom into Captivating Stories!</p>
+        </div>
+        <div className="auth-card">
+          <h2>Sign In</h2>
+          {errorMessage && <div className="auth-error">{errorMessage}</div>}
+          <form onSubmit={handleSubmit}>
+            <div className="auth-form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="auth-form-group">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              className="auth-btn"
+              disabled={isLoading}
             >
-              Welcome Back to Your <br />
-              <span style={{ color: "hsl(218, 81%, 75%)" }}>
-                Blogging Oasis{" "}
-              </span>
-            </h1>
-            <p className="px-3" style={{ color: "hsl(218, 81%, 85%)" }}>
-              Sign In and Let Your Ideas Blossom into Captivating Stories!
-            </p>
-          </MDBCol>
-          <MDBCol md="6" className="position-relative">
-            <div
-              id="radius-shape-1"
-              className="position-absolute rounded-circle shadow-5-strong"
-            ></div>
-            <div
-              id="radius-shape-2"
-              className="position-absolute shadow-5-strong"
-            ></div>
-            <MDBCard className="my-5 bg-glass">
-              <MDBCardBody className="p-5">
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Email"
-                  id="form3"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <MDBInput
-                  wrapperClass="mb-4"
-                  label="Password"
-                  id="form4"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <MDBBtn
-                  className="w-100 mb-4"
-                  size="md"
-                  onClick={handleSubmit}
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Signing in..." : "Sign in"}
-                </MDBBtn>
-                {errorMessage && (
-                  <p className="text-danger text-center">{errorMessage}</p>
-                )}
-                <div className="text-center">
-                  <p>or sign in with:</p>
-                  <MDBBtn
-                    tag="a"
-                    color="none"
-                    className="mx-3"
-                    style={{ color: "#1266f1" }}
-                  >
-                    <MDBIcon fab icon="facebook-f" size="sm" />
-                  </MDBBtn>
-                  <MDBBtn
-                    tag="a"
-                    color="none"
-                    className="mx-3"
-                    style={{ color: "#1266f1" }}
-                  >
-                    <MDBIcon fab icon="twitter" size="sm" />
-                  </MDBBtn>
-                  <MDBBtn
-                    tag="a"
-                    color="none"
-                    className="mx-3"
-                    style={{ color: "#1266f1" }}
-                  >
-                    <MDBIcon fab icon="google" size="sm" />
-                  </MDBBtn>
-                  <MDBBtn
-                    tag="a"
-                    color="none"
-                    className="mx-3"
-                    style={{ color: "#1266f1" }}
-                  >
-                    <MDBIcon fab icon="github" size="sm" />
-                  </MDBBtn>
-                </div>
-              </MDBCardBody>
-            </MDBCard>
-          </MDBCol>
-        </MDBRow>
-      </MDBContainer>
-    </>
+              {isLoading ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+          <div className="auth-social">
+            <p>or sign in with:</p>
+            <div className="auth-social-icons">
+              <a href="#" className="auth-social-icon" aria-label="Facebook">
+                <i className="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" className="auth-social-icon" aria-label="Twitter">
+                <i className="fab fa-twitter"></i>
+              </a>
+              <a href="#" className="auth-social-icon" aria-label="Google">
+                <i className="fab fa-google"></i>
+              </a>
+              <a href="#" className="auth-social-icon" aria-label="GitHub">
+                <i className="fab fa-github"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

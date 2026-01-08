@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import Cookies from "js-cookie";
-import "../css/BlogDetails.css"; // Updated CSS
-import { Box } from '@chakra-ui/react'
+import "../css/BlogDetails.css";
+
 const BlogDetails = () => {
   const { id } = useParams();
   const BASE_URL = process.env.REACT_APP_API_URL;
@@ -12,7 +12,8 @@ const BlogDetails = () => {
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editedCommentText, setEditedCommentText] = useState("");
   const [loading, setLoading] = useState(true);
-  const check=Cookies.get("token");
+  const isLoggedIn = Cookies.get("token");
+
   // Fetch blog details and comments on load
   useEffect(() => {
     const fetchBlogDetails = async () => {
@@ -31,7 +32,7 @@ const BlogDetails = () => {
 
         const data = await response.json();
         setBlog(data.blog);
-        setComments(data.blog.comments || []); // Ensure comments are included
+        setComments(data.blog.comments || []);
       } catch (error) {
         console.error("Error fetching blog details:", error);
       } finally {
@@ -40,11 +41,11 @@ const BlogDetails = () => {
     };
 
     fetchBlogDetails();
-  }, [BASE_URL, id,editedCommentText,newComment]);
+  }, [BASE_URL, id]);
 
   // Handle comment submission
   const handleCommentSubmit = useCallback(async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     if (!newComment.trim()) {
       alert("Comment cannot be empty.");
@@ -75,7 +76,7 @@ const BlogDetails = () => {
       const newCommentData = responseData.comment;
       if (newCommentData) {
         setComments((prevComments) => [...prevComments, newCommentData]);
-        setNewComment(""); // Clear input field
+        setNewComment("");
       }
     } catch (error) {
       console.error("Error posting comment:", error);
@@ -119,7 +120,7 @@ const BlogDetails = () => {
           comment._id === editingCommentId ? { ...comment, ...updatedComment.comment } : comment
         )
       );
-      setEditingCommentId(null); // Exit edit mode
+      setEditingCommentId(null);
       setEditedCommentText("");
     } catch (error) {
       console.error("Error updating comment:", error);
@@ -129,6 +130,10 @@ const BlogDetails = () => {
 
   // Handle Delete Comment
   const handleDeleteComment = useCallback(async (commentId) => {
+    if (!window.confirm("Are you sure you want to delete this comment?")) {
+      return;
+    }
+
     try {
       const token = Cookies.get("token") || "";
       const response = await fetch(`${BASE_URL}/comment/${commentId}`, {
@@ -154,7 +159,6 @@ const BlogDetails = () => {
     }
   }, [BASE_URL]);
 
-
   // Handle Like/Dislike for blog and comments
   const handleLikeDislike = useCallback(async (type, itemId, isComment = false) => {
     try {
@@ -170,7 +174,7 @@ const BlogDetails = () => {
           [isComment ? "commentId" : "blogId"]: itemId,
           type,
         }),
-      });  
+      });
 
       if (!response.ok) {
         throw new Error(`Failed to ${type} ${isComment ? "comment" : "blog"}`);
@@ -195,110 +199,129 @@ const BlogDetails = () => {
     }
   }, [BASE_URL]);
 
-
   // Get logged-in user's ID
   const loggedInUserId = Cookies.get("userid");
 
+  if (loading) {
+    return (
+      <div className="blog-details">
+        <div className="spinner-container">
+          <div className="spinner"></div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="blog-details">
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <>
-         {check? "":<Box bg='red' w='100%' p={4} color='white'>
-         "Please Login or Sign Up to add a blog, like, or comment on posts and engage with our community!"</Box>}
-          {blog && (
-            <div className="blog-detail">
-              <h1>{blog.title}</h1>
-              <p className="description">{blog.description}</p>
-              <img src={blog.image} alt={blog.title} className="blog-image" />
-              <p className="info">
-                <strong>Posted by:</strong> {blog?.name} | <strong>Date:</strong>{" "}
-                {new Date(blog.date).toLocaleDateString()}
-              </p>
-              <div className="like-dislike">
-                <button onClick={() => handleLikeDislike("like", blog._id)}>
-                  Like {blog.likes ? blog.likes : 0}
-                </button>
-                
-              </div>
-            </div>
+      {!isLoggedIn && (
+        <div className="login-alert">
+          Please Login or Sign Up to add a blog, like, or comment on posts and engage with our community!
+        </div>
+      )}
+      
+      {blog && (
+        <div className="blog-detail">
+          <h1>{blog.title}</h1>
+          <p className="description">{blog.description}</p>
+          {blog.image && (
+            <img src={blog.image} alt={blog.title} className="blog-image" loading="lazy" />
           )}
+          <p className="info">
+            <strong>Posted by:</strong> {blog?.name} | <strong>Date:</strong>{" "}
+            {new Date(blog.date).toLocaleDateString()}
+          </p>
+          <div className="like-dislike">
+            <button onClick={() => handleLikeDislike("like", blog._id)}>
+              Like {blog.likes ? blog.likes : 0}
+            </button>
+          </div>
+        </div>
+      )}
 
-          <div className="comments-section">
-            <h2>Comments</h2>
-            <form onSubmit={handleCommentSubmit} className="comment-form">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Write your comment..."
-              />
-              <button type="submit">Post Comment</button>
-            </form>
+      <div className="comments-section">
+        <h2>Comments</h2>
+        {isLoggedIn && (
+          <form onSubmit={handleCommentSubmit} className="comment-form">
+            <textarea
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              placeholder="Write your comment..."
+            />
+            <button type="submit">Post Comment</button>
+          </form>
+        )}
 
-            <div className="comment-list">
-              {comments.map((comment) => (
-                <div key={comment._id} className="comment-container">
-                  <div className="comment-header">
-                    <div className="author-info">
-                      <span className="author">
-                        {comment.user?.name || "Unknown"}
-                      </span>
-                    </div>
-                    <span className="date">
-                      {new Date(comment.date).toLocaleDateString()}
+        <div className="comment-list">
+          {comments.length > 0 ? (
+            comments.map((comment) => (
+              <div key={comment._id} className="comment-container">
+                <div className="comment-header">
+                  <div className="author-info">
+                    <span className="author">
+                      {comment.user?.name || "Unknown"}
                     </span>
                   </div>
-                  {editingCommentId === comment._id ? (
-                    <form onSubmit={handleEditCommentSubmit} className="edit-comment-form">
-                      <textarea
-                        value={editedCommentText}
-                        onChange={(e) => setEditedCommentText(e.target.value)}
-                        placeholder="Edit your comment..."
-                      />
-                      <button type="submit">Update Comment</button>
+                  <span className="date">
+                    {new Date(comment.date).toLocaleDateString()}
+                  </span>
+                </div>
+                {editingCommentId === comment._id ? (
+                  <form onSubmit={handleEditCommentSubmit} className="edit-comment-form">
+                    <textarea
+                      value={editedCommentText}
+                      onChange={(e) => setEditedCommentText(e.target.value)}
+                      placeholder="Edit your comment..."
+                    />
+                    <div className="btn-group">
+                      <button type="submit" className="btn btn-success">Update Comment</button>
                       <button
                         type="button"
+                        className="btn btn-secondary"
                         onClick={() => setEditingCommentId(null)}
                       >
                         Cancel
                       </button>
-                    </form>
-                  ) : (
-                    <>
-                      <div className="comment-text">{comment.text}</div>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <div className="comment-text">{comment.text}</div>
+                    <div className="comment-actions">
                       <div className="like-dislike">
-                        <button
-                          onClick={() => handleLikeDislike("like", comment._id, true)}
-                        >
+                        <button onClick={() => handleLikeDislike("like", comment._id, true)}>
                           Like {comment.likes ? comment.likes : 0}
                         </button>
-                        <button
-                          onClick={() => handleLikeDislike("dislike", comment._id, true)}
-                        >
+                        <button onClick={() => handleLikeDislike("dislike", comment._id, true)}>
                           Dislike {comment.dislikes ? comment.dislikes : 0}
                         </button>
-                     
-                        {comment.user && comment.user._id === loggedInUserId && (
-                       <span>
-                       <button style={{backgroundColor:'green'}} onClick={() => handleEditComment(comment._id, comment.text)}>
-                         Edit
-                       </button>
-                       <button style={{backgroundColor:'red',marginLeft:'10px'}} onClick={() => handleDeleteComment(comment._id)}>
-                         Delete
-                       </button>
-                    </span>
-                   )}
-                      </div >
-                    
-                    </>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </>
-      )}
+                      </div>
+                      {comment.user && comment.user._id === loggedInUserId && (
+                        <>
+                          <button
+                            className="btn btn-success"
+                            onClick={() => handleEditComment(comment._id, comment.text)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => handleDeleteComment(comment._id)}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+            ))
+          ) : (
+            <p style={{ textAlign: 'center', color: 'var(--text-muted)' }}>No comments yet. Be the first to comment!</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

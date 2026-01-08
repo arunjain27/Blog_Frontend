@@ -1,0 +1,119 @@
+/* ============================================
+   NAVBAR STYLES
+   ============================================ */
+
+.navbar {
+  background-color: #212529;
+  padding: 1rem 0;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #07e19c;
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+.navbar-brand:hover {
+  color: #05c584;
+}
+
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.navbar-nav.active {
+  display: flex;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  transition: color var(--transition-base);
+  position: relative;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text-light);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #07e19c;
+}
+
+.navbar-user {
+  color: #87ceeb;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .navbar-toggle {
+    display: block;
+  }
+  
+  .navbar-nav {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .navbar-nav.active {
+    display: flex;
+  }
+  
+  .nav-link {
+    width: 100%;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .navbar-user {
+    width: 100%;
+    padding: 0.75rem 0;
+    text-align: center;
+  }
+}

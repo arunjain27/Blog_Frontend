@@ -1,13 +1,5 @@
 import React, { useState } from "react";
-import {
-  FormControl,
-  FormLabel,
-  Textarea,
-  Input,
-  Button,
-  FormHelperText,
-  Spinner,
-} from "@chakra-ui/react";
+import '../css/addblog.css';
 import Cookies from 'js-cookie';
 
 const Addblog = () => {
@@ -32,6 +24,7 @@ const Addblog = () => {
 
   const handleGenerateAI = async () => {
     setIsLoading(true);
+    setErrorMessage("");
     try {
       const response = await fetch(`${BASE_URL}/generateText`, {
         method: "POST",
@@ -57,7 +50,6 @@ const Addblog = () => {
         tag: data.generatedTag,
         description: data.generatedDescription,
       }));
-      setErrorMessage("");
     } catch (error) {
       setErrorMessage("Failed to generate AI text. Please try again later.");
     } finally {
@@ -65,7 +57,8 @@ const Addblog = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setIsLoading(true);
     const token = Cookies.get("token");
 
@@ -97,10 +90,8 @@ const Addblog = () => {
         body: formDataToSend,
       });
 
-      console.log(response); 
       if (!response.ok) {
         const errorData = await response.json();
-        
         throw new Error(errorData.message || "Failed to submit form data");
       }
 
@@ -114,67 +105,107 @@ const Addblog = () => {
       });
       setGeneratedData(null);
     } catch (error) {
-      setErrorMessage("Failed to submit form data. Please try again later.");
+      setErrorMessage(error.message || "Failed to submit form data. Please try again later.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div>
-      {isLoading ? (
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <Spinner thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" size="xl" />
+    <div className="addblog-container">
+      {isLoading && !generatedData ? (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
         </div>
       ) : (
-        <div>
-          <FormControl>
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Title</FormLabel>
-            <Input
+        <form className="addblog-form" onSubmit={handleSubmit}>
+          <h2 className="addblog-title">Add New Blog</h2>
+          {errorMessage && <div className="addblog-error">{errorMessage}</div>}
+          
+          <div className="form-group">
+            <label htmlFor="title">Title</label>
+            <input
               type="text"
+              id="title"
               name="title"
               placeholder="Enter the title"
               value={formData.title}
               onChange={handleChange}
-              style={{ backgroundColor: "rgb(249, 249, 249)" }}
+              required
             />
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Description</FormLabel>
-            <Textarea
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
               name="description"
               placeholder="Enter the description"
               value={formData.description}
               onChange={handleChange}
-              style={{ backgroundColor: "rgb(249, 249, 249)" }}
+              required
             />
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Tag</FormLabel>
-            <Input
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="tag">Tag</label>
+            <input
               type="text"
+              id="tag"
               name="tag"
               placeholder="Enter the tag"
               value={formData.tag}
               onChange={handleChange}
-              style={{ backgroundColor: "rgb(249, 249, 249)" }}
+              required
             />
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Upload Image</FormLabel>
-            <Input
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="image">Upload Image</label>
+            <input
               type="file"
+              id="image"
               name="image"
+              accept="image/*"
               onChange={handleChange}
-              style={{ backgroundColor: "rgb(249, 249, 249)" }}
+              required
             />
-            <FormHelperText>We'll never share your data.</FormHelperText>
-            <Button type="button" onClick={handleGenerateAI}>Generate AI Text</Button>
-            <FormLabel style={{ textAlign: "center", fontSize: "1.7rem" }}>Generated Text</FormLabel>
-            <Textarea
-              name="generatedText"
-              value={generatedData ? generatedData.generatedDescription : ""}
-              readOnly
-              style={{ backgroundColor: "rgb(249, 249, 249)" }}
-            />
-            <Button type="button" onClick={handleSubmit}>Submit Blog</Button>
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-          </FormControl>
-        </div>
+            <div className="form-helper">We'll never share your data.</div>
+          </div>
+
+          <div className="form-actions">
+            <button
+              type="button"
+              className="btn btn-generate"
+              onClick={handleGenerateAI}
+              disabled={isLoading}
+            >
+              {isLoading ? "Generating..." : "Generate AI Text"}
+            </button>
+          </div>
+
+          {generatedData && (
+            <div className="generated-text">
+              <label htmlFor="generatedDescription">Generated Text</label>
+              <textarea
+                id="generatedDescription"
+                name="generatedText"
+                value={generatedData.generatedDescription || ""}
+                readOnly
+              />
+            </div>
+          )}
+
+          <div className="form-actions">
+            <button
+              type="submit"
+              className="btn btn-submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Submitting..." : "Submit Blog"}
+            </button>
+          </div>
+        </form>
       )}
     </div>
   );
