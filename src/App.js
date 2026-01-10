@@ -2,6 +2,8 @@ import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ToastContainer from "./components/ToastContainer";
+import { useToast } from "./hooks/useToast";
 import './css/global.css';
 
 const Addblog = React.lazy(() => import("./components/Addblog"));
@@ -19,28 +21,36 @@ const LoadingFallback = () => (
   </div>
 );
 
+// Create a context to share toast functionality
+export const ToastContext = React.createContext();
+
 function App() {
+  const toast = useToast();
+
   return (
-    <div className="app-container">
-      <BrowserRouter>
-        <Navbar />
-        <main className="main-content">
-          <Suspense fallback={<LoadingFallback />}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/Allblog" element={<Allblog />} />
-              <Route path="/myblog" element={<Myblog />} />
-              <Route path="/addblog" element={<Addblog />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/signin" element={<Signin />} />
-              <Route path="/blog/:id" element={<BlogDetails />} />
-              <Route path="/edit-blog/:id" element={<EditBlog />} />
-            </Routes>
-          </Suspense>
-        </main>
-        <Footer />
-      </BrowserRouter>
-    </div>
+    <ToastContext.Provider value={toast}>
+      <div className="app-container">
+        <BrowserRouter>
+          <Navbar />
+          <main className="main-content">
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/Allblog" element={<Allblog />} />
+                <Route path="/myblog" element={<Myblog />} />
+                <Route path="/addblog" element={<Addblog />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/signin" element={<Signin />} />
+                <Route path="/blog/:id" element={<BlogDetails />} />
+                <Route path="/edit-blog/:id" element={<EditBlog />} />
+              </Routes>
+            </Suspense>
+          </main>
+          <Footer />
+          <ToastContainer toasts={toast.toasts} removeToast={toast.removeToast} />
+        </BrowserRouter>
+      </div>
+    </ToastContext.Provider>
   );
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import '../css/intro.css';
 import Intro_1 from '../images/Intro_1 - Copy.webp';
 import Intro_1_2x from '../images/Intro_1@2x.webp';
@@ -6,7 +6,7 @@ import Intro_2 from '../images/Intro_2 - Copy.webp';
 import Intro_2_2x from '../images/Intro_2@2x.webp';
 
 const Intro = () => {
-  const IntroObj = [
+  const introObj = [
     {
       imageSrc: Intro_1,
       imageSrcSet: `${Intro_1} 1x, ${Intro_1_2x} 2x`,
@@ -21,10 +21,41 @@ const Intro = () => {
     },
   ];
 
+  const sectionRefs = useRef([]);
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    sectionRefs.current.forEach(section => {
+      if (section) observer.observe(section);
+    });
+
+    return () => {
+      sectionRefs.current.forEach(section => {
+        if (section) observer.unobserve(section);
+      });
+    };
+  }, []);
+
   return (
     <>
-      {IntroObj.map((slide, index) => (
-        <section key={index} className="intro-section">
+      {introObj.map((slide, index) => (
+        <section 
+          key={index} 
+          className="intro-section"
+          ref={el => sectionRefs.current[index] = el}
+        >
           <div className="intro-content">
             <h2>{slide.heading}</h2>
             <p>{slide.paragraph}</p>

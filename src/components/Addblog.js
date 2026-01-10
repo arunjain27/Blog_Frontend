@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import '../css/addblog.css';
 import Cookies from 'js-cookie';
+import { ToastContext } from "../App";
 
 const Addblog = () => {
-  const BASE_URL = process.env.REACT_APP_API_URL;
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -13,29 +15,55 @@ const Addblog = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [generatedData, setGeneratedData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const toast = useContext(ToastContext);
+  const username = Cookies.get("username");
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "image" ? files[0] : value,
-    }));
+    
+    if (name === "image" && files && files[0]) {
+      const file = files[0];
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: file,
+      }));
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   const handleGenerateAI = async () => {
-    setIsLoading(true);
+    if (!formData.title && !formData.description && !formData.tag) {
+      if (toast) toast.warning("Please fill in at least one field to generate AI content.");
+      return;
+    }
+
+    setIsGenerating(true);
     setErrorMessage("");
+
     try {
       const response = await fetch(`${BASE_URL}/generateText`, {
         method: "POST",
-        body: JSON.stringify({
-          title: formData.title,
-          description: formData.description,
-          tag: formData.tag,
-        }),
         headers: {
           "Content-Type": "application/json",
         },
+        body: JSON.stringify({
+          title: formData.title || "No title provided",
+          description: formData.description || "No description provided",
+          tag: formData.tag || "Use according to the content",
+        }),
       });
 
       if (!response.ok) {
@@ -46,14 +74,18 @@ const Addblog = () => {
       setGeneratedData(data);
       setFormData((prevData) => ({
         ...prevData,
-        title: data.generatedTitle,
-        tag: data.generatedTag,
-        description: data.generatedDescription,
+        title: data.generatedTitle || prevData.title,
+        tag: data.generatedTag || prevData.tag,
+        description: data.generatedDescription || prevData.description,
       }));
+      
+      if (toast) toast.success("AI content generated successfully!");
     } catch (error) {
-      setErrorMessage("Failed to generate AI text. Please try again later.");
+      const errorMsg = "Failed to generate AI text. Please try again later.";
+      setErrorMessage(errorMsg);
+      if (toast) toast.error(errorMsg);
     } finally {
-      setIsLoading(false);
+      setIsGenerating(false);
     }
   };
 
@@ -64,14 +96,18 @@ const Addblog = () => {
 
     if (!token) {
       setIsLoading(false);
-      setErrorMessage("Please log in to add a blog.");
+      const errorMsg = "Please log in to add a blog.";
+      setErrorMessage(errorMsg);
+      if (toast) toast.error(errorMsg);
       return;
     }
 
     // Validate form fields
     if (!formData.title || !formData.description || !formData.tag || !formData.image) {
       setIsLoading(false);
-      setErrorMessage("All fields are required.");
+      const errorMsg = "All fields are required.";
+      setErrorMessage(errorMsg);
+      if (toast) toast.warning(errorMsg);
       return;
     }
 
@@ -95,118 +131,200 @@ const Addblog = () => {
         throw new Error(errorData.message || "Failed to submit form data");
       }
 
+      if (toast) toast.success("Blog posted successfully!");
       window.location.href = "/";
-      setErrorMessage("");
-      setFormData({
-        title: "",
-        description: "",
-        tag: "",
-        image: null,
-      });
-      setGeneratedData(null);
     } catch (error) {
-      setErrorMessage(error.message || "Failed to submit form data. Please try again later.");
-    } finally {
+      const errorMsg = error.message || "Failed to submit form data. Please try again later.";
+      setErrorMessage(errorMsg);
+      if (toast) toast.error(errorMsg);
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="addblog-container">
-      {isLoading && !generatedData ? (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
+    <div className="addblog-page">
+      <div className="addblog-container">
+        <div className="addblog-header">
+          <h1 className="addblog-main-title">
+            <span className="addblog-title-icon">✍️</span>
+            Create Your Blog Post
+          </h1>
+          <p className="addblog-subtitle">
+            Share your thoughts, ideas, and stories with the world
+          </p>
         </div>
-      ) : (
-        <form className="addblog-form" onSubmit={handleSubmit}>
-          <h2 className="addblog-title">Add New Blog</h2>
-          {errorMessage && <div className="addblog-error">{errorMessage}</div>}
-          
-          <div className="form-group">
-            <label htmlFor="title">Title</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              placeholder="Enter the title"
-              value={formData.title}
-              onChange={handleChange}
-              required
-            />
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="description">Description</label>
-            <textarea
-              id="description"
-              name="description"
-              placeholder="Enter the description"
-              value={formData.description}
-              onChange={handleChange}
-              required
-            />
-          </div>
+        <div className="addblog-form-wrapper">
+          <form className="addblog-form" onSubmit={handleSubmit}>
+            {errorMessage && (
+              <div className="addblog-error">
+                <i className="fas fa-exclamation-circle"></i>
+                {errorMessage}
+              </div>
+            )}
 
-          <div className="form-group">
-            <label htmlFor="tag">Tag</label>
-            <input
-              type="text"
-              id="tag"
-              name="tag"
-              placeholder="Enter the tag"
-              value={formData.tag}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="image">Upload Image</label>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-              onChange={handleChange}
-              required
-            />
-            <div className="form-helper">We'll never share your data.</div>
-          </div>
-
-          <div className="form-actions">
-            <button
-              type="button"
-              className="btn btn-generate"
-              onClick={handleGenerateAI}
-              disabled={isLoading}
-            >
-              {isLoading ? "Generating..." : "Generate AI Text"}
-            </button>
-          </div>
-
-          {generatedData && (
-            <div className="generated-text">
-              <label htmlFor="generatedDescription">Generated Text</label>
-              <textarea
-                id="generatedDescription"
-                name="generatedText"
-                value={generatedData.generatedDescription || ""}
-                readOnly
+            <div className="form-group">
+              <label htmlFor="title">
+                <i className="fas fa-heading"></i>
+                Blog Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="Enter a captivating title for your blog..."
+                value={formData.title}
+                onChange={handleChange}
+                required
+                className="form-input"
               />
             </div>
-          )}
 
-          <div className="form-actions">
-            <button
-              type="submit"
-              className="btn btn-submit"
-              disabled={isLoading}
-            >
-              {isLoading ? "Submitting..." : "Submit Blog"}
-            </button>
-          </div>
-        </form>
-      )}
+            <div className="form-group">
+              <label htmlFor="tag">
+                <i className="fas fa-tag"></i>
+                Category / Tag
+              </label>
+              <input
+                type="text"
+                id="tag"
+                name="tag"
+                placeholder="e.g., Technology, Lifestyle, Travel..."
+                value={formData.tag}
+                onChange={handleChange}
+                required
+                className="form-input"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="description">
+                <i className="fas fa-align-left"></i>
+                Blog Content
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Write your blog post content here... Share your thoughts, ideas, and experiences."
+                value={formData.description}
+                onChange={handleChange}
+                required
+                className="form-textarea"
+                rows="12"
+              />
+              <div className="form-helper">
+                <i className="fas fa-info-circle"></i>
+                Tip: Write engaging content that captures your readers' attention
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="image">
+                <i className="fas fa-image"></i>
+                Featured Image
+              </label>
+              <div className="file-upload-wrapper">
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleChange}
+                  required
+                  className="file-input"
+                />
+                <label htmlFor="image" className="file-upload-label">
+                  <i className="fas fa-cloud-upload-alt"></i>
+                  <span>{imagePreview ? "Change Image" : "Choose Image"}</span>
+                </label>
+                {imagePreview && (
+                  <div className="image-preview">
+                    <img src={imagePreview} alt="Preview" />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => {
+                        setImagePreview(null);
+                        setFormData(prev => ({ ...prev, image: null }));
+                      }}
+                    >
+                      <i className="fas fa-times"></i>
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className="form-helper">
+                <i className="fas fa-image"></i>
+                Recommended: High-quality images (JPG, PNG) up to 5MB
+              </div>
+            </div>
+
+            <div className="form-divider">
+              <span>or</span>
+            </div>
+
+            <div className="form-actions">
+              <button
+                type="button"
+                className="btn btn-generate"
+                onClick={handleGenerateAI}
+                disabled={isGenerating || isLoading}
+              >
+                {isGenerating ? (
+                  <>
+                    <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }}></div>
+                    Generating AI Content...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-magic"></i>
+                    Generate with AI
+                  </>
+                )}
+              </button>
+            </div>
+
+            {generatedData && (
+              <div className="generated-content">
+                <div className="generated-content-header">
+                  <i className="fas fa-sparkles"></i>
+                  <span>AI Generated Content</span>
+                </div>
+                <div className="generated-content-body">
+                  <p className="generated-notice">
+                    <i className="fas fa-lightbulb"></i>
+                    Review and edit the AI-generated content below. You can modify it as needed.
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div className="form-submit-section">
+              <button
+                type="submit"
+                className="btn btn-submit"
+                disabled={isLoading || isGenerating}
+              >
+                {isLoading ? (
+                  <>
+                    <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }}></div>
+                    Publishing...
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-paper-plane"></i>
+                    Publish Blog Post
+                  </>
+                )}
+              </button>
+              <Link to="/Allblog" className="btn-cancel">
+                <i className="fas fa-times"></i>
+                Cancel
+              </Link>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,15 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import "../css/auth.css";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
+import { ToastContext } from "../App";
 
 function Signup() {
-  const BASE_URL = process.env.REACT_APP_API_URL;
-
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const toast = useContext(ToastContext);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -20,7 +22,7 @@ function Signup() {
     }
     setIsLoading(true);
     setErrorMessage(null);
-    
+
     try {
       const response = await fetch(`${BASE_URL}/signup`, {
         method: "POST",
@@ -30,9 +32,9 @@ function Signup() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        setErrorMessage(
-          errorData.message || "Sign up failed. Please try again."
-        );
+        const errorMsg = errorData.message || "Sign up failed. Please try again.";
+        setErrorMessage(errorMsg);
+        toast?.error(errorMsg);
         setIsLoading(false);
       } else {
         const tokenData = await response.json();
@@ -40,13 +42,16 @@ function Signup() {
         const userid = tokenData.userid;
 
         Cookies.set("token", token);
-        Cookies.set("username", name); 
+        Cookies.set("username", name);
         Cookies.set("userid", userid);
 
+        toast?.success(`Welcome to Musingsss, ${name}!`);
         window.location.href = "/";
       }
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again later.");
+      const errorMsg = "An error occurred. Please try again later.";
+      setErrorMessage(errorMsg);
+      toast?.error(errorMsg);
       setIsLoading(false);
     }
   };
@@ -76,6 +81,7 @@ function Signup() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                placeholder="Enter your name"
               />
             </div>
             <div className="auth-form-group">
@@ -86,6 +92,7 @@ function Signup() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                placeholder="Enter your email"
               />
             </div>
             <div className="auth-form-group">
@@ -96,23 +103,25 @@ function Signup() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                placeholder="Create a password"
               />
             </div>
-            <button
-              type="submit"
-              className="auth-btn"
-              disabled={isLoading}
-            >
+            <button type="submit" className="auth-btn" disabled={isLoading}>
               {isLoading ? (
                 <>
-                  <span className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px', marginRight: '0.5rem', display: 'inline-block', verticalAlign: 'middle' }}></span>
+                  <div className="spinner" style={{ width: '20px', height: '20px', borderWidth: '2px' }}></div>
                   Signing up...
                 </>
               ) : (
-                "Sign up"
+                "Sign Up"
               )}
             </button>
           </form>
+          <div className="auth-footer">
+            <p>
+              Already have an account? <Link to="/signin">Sign In</Link>
+            </p>
+          </div>
           <div className="auth-social">
             <p>or sign up with:</p>
             <div className="auth-social-icons">

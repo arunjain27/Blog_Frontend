@@ -1,131 +1,45 @@
 /* ============================================
-   HOME PAGE STYLES (Updated)
+   MODERN HOME PAGE STYLES
    ============================================ */
 
-.home-container {
-  min-height: calc(100vh - 200px);
-  background: linear-gradient(
-    90deg,
-    rgba(214, 243, 236, 1) 0%,
-    rgba(255, 252, 252, 1) 0%,
-    rgba(247, 247, 247, 1) 0%,
-    rgba(225, 239, 237, 1) 0%,
-    rgba(233, 242, 240, 1) 100%,
-    rgba(244, 248, 247, 1) 100%
-  );
-  font-family: var(--font-family-serif);
-  padding: 2rem 0;
+.home-page {
+  min-height: calc(100vh - var(--navbar-height));
+  background: var(--bg-primary);
+  position: relative;
+  overflow-x: hidden;
 }
 
-.home-content {
-  max-width: var(--max-width);
-  margin: 0 auto;
+.home-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  background: linear-gradient(135deg, 
+    rgba(99, 102, 241, 0.03) 0%, 
+    rgba(139, 92, 246, 0.03) 50%,
+    rgba(236, 72, 153, 0.03) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-intro-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.cards-section-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  margin: 4rem 0;
   padding: 0 var(--container-padding);
 }
 
-/* Cards Section */
-.cards-section-container {
-  display: flex;
-  justify-content: center;
-  margin: 2rem 0;
-}
-
-/* Blog List */
-.blog-list-container {
-  margin-top: 2rem;
-}
-
-.blog-list-item {
-  margin-bottom: 2rem;
-}
-
-/* Loading State */
-.home-loading {
-  text-align: center;
-  padding: 4rem 2rem;
-}
-
-.home-loading h5 {
-  margin-top: 2rem;
-  font-size: 1.25rem;
-  color: var(--text-primary);
-}
-
-.home-loading p {
-  margin-top: 1rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-}
-
-/* Empty State */
-.empty-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  color: var(--text-secondary);
-  font-size: 1.1rem;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 3rem 0;
-  flex-wrap: wrap;
-}
-
-.pagination-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--border-color);
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  border-radius: var(--border-radius);
-  cursor: pointer;
-  transition: all var(--transition-base);
-  font-size: 0.9rem;
-}
-
-.pagination-btn:hover:not(:disabled) {
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border-color: var(--primary-color);
-}
-
-.pagination-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.pagination-btn.active {
-  background-color: var(--primary-color);
-  color: var(--text-light);
-  border-color: var(--primary-color);
-}
-
-.pagination-info {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin: 0 1rem;
-}
-
 @media (max-width: 768px) {
-  .home-container {
-    padding: 1rem 0;
-  }
-  
-  .pagination {
-    gap: 0.25rem;
-  }
-  
-  .pagination-btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.8rem;
-  }
-  
-  .pagination-info {
-    width: 100%;
-    text-align: center;
-    margin: 0.5rem 0;
+  .cards-section-container {
+    margin: 2rem 0;
   }
 }
