@@ -1,57 +1,12 @@
-import React, { memo } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef } from 'react';
+import '../css/intro.css';
 import Intro_1 from '../images/Intro_1 - Copy.webp';
-import Intro_1_2x from '../images/Intro_1@2x.webp';  // For high-density screens (2x)
+import Intro_1_2x from '../images/Intro_1@2x.webp';
 import Intro_2 from '../images/Intro_2 - Copy.webp';
-import Intro_2_2x from '../images/Intro_2@2x.webp';  // For high-density screens (2x)
+import Intro_2_2x from '../images/Intro_2@2x.webp';
 
-const ContentWithImageContainer = styled.section`
-  display: flex;
-  align-items: center;
-  margin: 40px 0;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  overflow: hidden;
-  height: 60vh; 
- 
-  @media (max-width: 768px) {
-    flex-direction: column;
-    height: 40vh;
-  }
-`;
-
-const Content = styled.div`
-  flex: 1;
-  padding: 20px;
-
-  @media (max-width: 768px) {
-    padding: 10px;
-  }
-`;
-
-const ImageWrapper = styled.div`
-  flex: 1;
-  max-width: 50%;
-  padding: 20px;
-
-  @media (max-width: 768px) {
-    max-width: 100%;
-    padding: 10px;
-  }
-
-  img {
-    width: 100%;
-    height: auto;
-    border-radius: 10px;
-    
-    aspect-ratio: 16 / 9; // Maintain a 16:9 aspect ratio
-
-    object-fit: cover;
-  }
-`;
-
-const ContentWithImage = memo(() => {
-  const IntroObj = [
+const Intro = () => {
+  const introObj = [
     {
       imageSrc: Intro_1,
       imageSrcSet: `${Intro_1} 1x, ${Intro_1_2x} 2x`,
@@ -66,32 +21,57 @@ const ContentWithImage = memo(() => {
     },
   ];
 
+  const sectionRefs = useRef([]);
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.2,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, observerOptions);
+
+    sectionRefs.current.forEach(section => {
+      if (section) observer.observe(section);
+    });
+
+    return () => {
+      sectionRefs.current.forEach(section => {
+        if (section) observer.unobserve(section);
+      });
+    };
+  }, []);
+
   return (
     <>
-      {IntroObj.map((slide, index) => (
-        <ContentWithImageContainer
-          key={index}
-          style={{
-            backgroundColor: 'rgb(235, 244, 245)',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-          }}
+      {introObj.map((slide, index) => (
+        <section 
+          key={index} 
+          className="intro-section"
+          ref={el => sectionRefs.current[index] = el}
         >
-          <Content>
+          <div className="intro-content">
             <h2>{slide.heading}</h2>
             <p>{slide.paragraph}</p>
-          </Content>
-          <ImageWrapper>
+          </div>
+          <div className="intro-image-wrapper">
             <img
-              src={slide.imageSrc} 
+              src={slide.imageSrc}
               srcSet={slide.imageSrcSet}
               alt={`Blog ${index + 1}`}
-              loading="lazy"
+              loading={index === 0 ? 'eager' : 'lazy'}
             />
-          </ImageWrapper>
-        </ContentWithImageContainer>
+          </div>
+        </section>
       ))}
     </>
   );
-});
+};
 
-export default ContentWithImage;
+export default Intro;

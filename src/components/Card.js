@@ -1,90 +1,73 @@
 import React from "react";
-import {
-  Card,
-  CardBody,
-  CardFooter,
-  Image,
-  Stack,
-  Text,
-  Heading,
-  Button,
-} from "@chakra-ui/react";
+import '../css/blog-card.css';
 import { Link } from 'react-router-dom';
 
-function NewCardComponent({
+function Card({
   _id,
   name = "none",
   title = "please upload the title",
   tag = "please upload the tag",
   description = "please upload the description",
   date = "12-23-2024",
-  image = "ddvvdvd",
+  image = "",
   deletefunction,
   deletepost,
   editpost
 }) {
   const handleDelete = () => {
-    deletefunction(_id);
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      deletefunction(_id);
+    }
   };
+
   const indianDateTimeString = new Date(date).toLocaleString("en-IN", {
     timeZone: "Asia/Kolkata",
   });
 
   return (
-    <Card direction={{ base: "column", sm: "row" }} overflowY="auto" variant="outline" style={{ boxShadow: "2px 2px 2px grey", scrollBehavior: "initial", marginTop: "10px" }}>
-      <Image objectFit="contain" maxW={{ base: "100%", sm: "200px" }} src={image} alt={title} style={{ boxShadow: "1px 1px 2px darkgreen" }} />
-      <Stack>
-        <CardBody>
-          <Heading size="md" fontWeight="bold" fontFamily="sans-serif" color="rgb(4, 96, 103)">{title}</Heading>
-          <div className="card-date-tag" style={{ display: "flex", flexWrap: "column" }}>
-            <Text py="1" fontFamily="serif" fontSize="0.7rem" fontWeight="600" color="rgb(112, 131, 134)"> {indianDateTimeString}</Text>
-            <Text py="0" ml="5" fontFamily="serif" fontWeight="600" color="red"> #{tag}</Text>
+    <div className="blog-card">
+      {image && (
+        <img
+          src={image}
+          alt={title}
+          className="blog-card-image"
+          loading="lazy"
+        />
+      )}
+      <div className="blog-card-content">
+        <h3 className="blog-card-title">{title}</h3>
+        <div className="blog-card-meta">
+          <span className="blog-card-date">{indianDateTimeString}</span>
+          <span className="blog-card-tag">#{tag}</span>
+        </div>
+        <p className="blog-card-description">{description}</p>
+        <div className="blog-card-footer">
+          <div className="blog-card-author">
+            <span>Posted by: </span>
+            {name}
           </div>
-          <Text py="2" style={{ overflow: "hidden", fontWeight: "500", fontFamily: "sans-serif", color: "rgb(4, 96, 103)", backgroundColor: "rgb(235, 244, 245)" }}>{description}</Text>
-        </CardBody>
-        <CardFooter>
-          <Button variant="solid">
-            <span style={{ fontWeight: "600", fontSize: "0.8rem", color: "grey" }}>Posted by: </span> {name}
-          </Button>
-          {deletepost ? null : (
-            <Button variant="solid" colorScheme="red" style={{ marginLeft: "2rem" }} onClick={handleDelete}>Delete post</Button>
-          )}
-        
-        {editpost ? (
-  <Link 
-    to={`/edit-blog/${_id}`} 
-    className="edit-link" 
-    style={{
-      display: 'inline-block',
-       marginLeft:'10px',
-       padding: '8px 25px',
-      fontSize: '16px',
-      fontWeight: 'bold',
-      color: '#fff',
-      backgroundColor: '#007bff', // Blue background color
-      borderRadius: '5px',
-      textAlign: 'center',
-      textDecoration: 'none',
-      transition: 'background-color 0.3s ease, transform 0.2s ease',
-      boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-    }}
-    onMouseEnter={(e) => {
-      e.target.style.backgroundColor = '#0056b3'; // Darker blue on hover
-      e.target.style.transform = 'scale(1.05)'; // Slightly enlarge the button on hover
-    }}
-    onMouseLeave={(e) => {
-      e.target.style.backgroundColor = '#007bff'; // Original blue color
-      e.target.style.transform = 'scale(1)'; // Return to original size
-    }}
-  >
-    Edit Post
-  </Link>
-) : ""}
-
-        </CardFooter>
-      </Stack>
-    </Card>
+          <div className="blog-card-actions">
+            {!deletepost && (
+              <button
+                className="btn btn-danger"
+                onClick={handleDelete}
+              >
+                Delete post
+              </button>
+            )}
+            {editpost && (
+              <Link
+                to={`/edit-blog/${_id}`}
+                className="btn btn-primary"
+              >
+                Edit Post
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
-export default NewCardComponent;
+export default Card;

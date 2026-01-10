@@ -1,22 +1,20 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-const Intro = React.lazy(() => import("./Intro"));
-const Cardsection = React.lazy(() => import("./Cardsection"));
-const Carousel = React.lazy(() => import("./Carousel"));
+import Intro from "./Intro";
+import Cardsection from "./Cardsection";
+import Carousel from "./Carousel";
+import '../css/home.css';
 
 const Home = () => {
-
   return (
-    <>
-       <React.Suspense fallback={<div>Loading...</div>}>
-      <Carousel/>
-      <Intro/> 
-     
-   <div style={{display:'flex',justifyContent:'center'}}>
-      <Cardsection/>
+    <div className="home-page">
+      <Carousel />
+      <div className="home-intro-wrapper">
+        <Intro />
       </div>
-      </React.Suspense>
-       </>
+      <div className="cards-section-container">
+        <Cardsection />
+      </div>
+    </div>
   );
 };
 

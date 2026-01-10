@@ -1,45 +1,45 @@
-.home-head {
-  height: auto;
-  background-color: rgb(255, 255, 255);
- 
-  background: linear-gradient(
-    90deg,
-    rgba(214, 243, 236, 1) 0%,
-    rgba(255, 252, 252, 1) 0%,
-    rgba(247, 247, 247, 1) 0%,
-    rgba(225, 239, 237, 1) 0%,
-    rgba(233, 242, 240, 1) 100%,
-    rgba(0, 120, 99, 1) 100%,
-    rgba(244, 248, 247, 1) 100%
-  );
+/* ============================================
+   MODERN HOME PAGE STYLES
+   ============================================ */
 
-  font-family: "Times New Roman", Times, serif;
+.home-page {
+  min-height: calc(100vh - var(--navbar-height));
+  background: var(--bg-primary);
+  position: relative;
+  overflow-x: hidden;
 }
 
-.home-head-inner2 {
-  background: radial-gradient(
-    circle,
-    rgba(214, 243, 236, 1) 0%,
-    rgba(255, 252, 252, 1) 0%,
-    rgba(247, 247, 247, 1) 0%,
-    rgb(113, 247, 224) 1%,
-    rgba(0, 153, 127, 1) 3%,
-    rgba(244, 248, 247, 1) 100%,
-    rgba(244, 248, 247, 1) 100%
-  );
-  align-items: center;
+.home-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 100vh;
-
-  overflow-y: auto;
-
-  /* Keep horizontal overflow visible */
+  background: linear-gradient(135deg, 
+    rgba(99, 102, 241, 0.03) 0%, 
+    rgba(139, 92, 246, 0.03) 50%,
+    rgba(236, 72, 153, 0.03) 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.home-head-inner2-card {
-  margin-top: 2%;
-  
+.home-intro-wrapper {
+  position: relative;
+  z-index: 1;
 }
 
-.home-head-inner3 {
-  height: 100vh;
+.cards-section-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  margin: 4rem 0;
+  padding: 0 var(--container-padding);
+}
+
+@media (max-width: 768px) {
+  .cards-section-container {
+    margin: 2rem 0;
+  }
 }
