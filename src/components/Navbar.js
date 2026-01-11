@@ -25,6 +25,27 @@ function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Close menu on route change
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [location]);
+
+  // Prevent body scroll when menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.classList.add('menu-open');
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.classList.remove('menu-open');
+      document.body.style.overflow = '';
+    }
+
+    return () => {
+      document.body.classList.remove('menu-open');
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
+
   const handleSignOut = () => {
     Cookies.remove('token');
     Cookies.remove('username');
@@ -39,10 +60,14 @@ function Navbar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
       <div className="navbar-container">
-        <NavLink to="/" className="navbar-brand">
+        <NavLink to="/" className="navbar-brand" onClick={closeMenu}>
           <span className="brand-icon">✍️</span>
           <span className="brand-text">Musingsss</span>
         </NavLink>
@@ -65,7 +90,7 @@ function Navbar() {
             <NavLink
               to="/Allblog"
               className="nav-link"
-              onClick={() => setIsMenuOpen(false)}
+              onClick={closeMenu}
             >
               All Blogs
             </NavLink>
@@ -75,7 +100,7 @@ function Navbar() {
               <NavLink
                 to="/myblog"
                 className="nav-link"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={closeMenu}
               >
                 My Blogs
               </NavLink>
@@ -87,7 +112,7 @@ function Navbar() {
                 <NavLink
                   to="/addblog"
                   className="nav-link nav-link-primary"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={closeMenu}
                 >
                   Write
                 </NavLink>
@@ -107,7 +132,7 @@ function Navbar() {
                 <NavLink
                   to="/signin"
                   className="nav-link"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={closeMenu}
                 >
                   Sign In
                 </NavLink>
@@ -116,12 +141,17 @@ function Navbar() {
                 <NavLink
                   to="/signup"
                   className="nav-link nav-link-primary"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={closeMenu}
                 >
                   Sign Up
                 </NavLink>
               </li>
             </>
+          )}
+          {username && (
+            <li className="navbar-user">
+              {username}
+            </li>
           )}
         </ul>
         
@@ -133,11 +163,6 @@ function Navbar() {
           >
             {theme === 'light' ? '🌙' : '☀️'}
           </button>
-          {username && (
-            <span className="navbar-user">
-              {username}
-            </span>
-          )}
         </div>
       </div>
     </nav>

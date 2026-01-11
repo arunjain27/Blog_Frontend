@@ -1,218 +1,262 @@
 /* ============================================
-   MODERN CAROUSEL STYLES WITH GLASSMORPHISM
+   ULTRA SMOOTH CINEMATIC CAROUSEL - PERFECTED
    ============================================ */
 
-.carousel-container {
-  position: relative;
-  margin: 0;
-  overflow: hidden;
-  border-radius: 0;
-  height: 85vh;
-  min-height: 500px;
-  max-height: 800px;
-}
-
-.carousel-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.carousel-slide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-  transform: scale(1.1);
-}
-
-.carousel-slide.active {
-  opacity: 1;
-  position: relative;
-  transform: scale(1);
-}
-
-.carousel-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.carousel-slide::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.2) 50%,
-    rgba(0, 0, 0, 0.5) 100%
-  );
-  z-index: 1;
-}
-
-.carousel-caption {
-  position: absolute;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--text-light);
-  padding: 2.5rem 3rem;
-  border-radius: var(--border-radius-lg);
-  max-width: 90%;
-  width: 100%;
-  max-width: 800px;
-  text-align: center;
-  box-shadow: var(--shadow-2xl);
-  z-index: 2;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(30px);
+   .carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 85vh;
+    min-height: 500px;
+    max-height: 800px;
+    overflow: hidden;
+    background: #000;
+    margin: 0;
+    padding: 0;
   }
-  to {
+  
+  .carousel-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* ============================================
+     SLIDES - BUTTER SMOOTH TRANSITIONS
+     ============================================ */
+  
+  .carousel-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 1;
+    will-change: opacity;
+  }
+  
+  .carousel-slide.active {
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 2;
+  }
+  
+  /* IMAGE CONTAINER - KEN BURNS EFFECT */
+  .carousel-slide-image-wrapper {
+    position: absolute;
+    inset: 0;
+    transform: scale(1.08);
+    transition: transform 8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+  
+  .carousel-slide.active .carousel-slide-image-wrapper {
+    transform: scale(1);
+  }
+  
+  /* IMAGE */
+  .carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* DARK OVERLAY */
+  .carousel-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.45),
+      rgba(0, 0, 0, 0.25),
+      rgba(0, 0, 0, 0.55)
+    );
+    z-index: 1;
+  }
+  
+  /* ============================================
+     CAPTION - SMOOTH FADE & SLIDE
+     ============================================ */
+  
+  .carousel-caption {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    
+    width: calc(100% - 3rem);
+    max-width: 800px;
+    
+    padding: 2.5rem 3rem;
+    text-align: center;
+    
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    
+    color: #f1f5f9;
+    
+    opacity: 0;
+    transition: 
+      opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s,
+      transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s;
+    
+    z-index: 3;
+    box-sizing: border-box;
+    will-change: opacity, transform;
+  }
+  
+  .carousel-slide.active .carousel-caption {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
-}
-
-.carousel-caption h2 {
-  font-size: clamp(1.75rem, 4vw, 3rem);
-  font-weight: var(--font-weight-bold);
-  margin: 0;
-  color: var(--text-light);
-  line-height: var(--line-height-tight);
-  letter-spacing: -0.02em;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-controls {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 0.75rem;
-  z-index: 3;
-  background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--border-radius-full);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.carousel-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.4);
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all var(--transition-base);
-  padding: 0;
-  position: relative;
-}
-
-.carousel-dot::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: var(--text-light);
-  transition: all var(--transition-base);
-}
-
-.carousel-dot.active::before {
-  width: 100%;
-  height: 100%;
-}
-
-.carousel-dot.active,
-.carousel-dot:hover {
-  background-color: rgba(255, 255, 255, 0.6);
-  transform: scale(1.3);
-}
-
-@media (max-width: 968px) {
-  .carousel-container {
-    height: 70vh;
-    min-height: 400px;
-  }
-  
-  .carousel-caption {
-    bottom: 60px;
-    padding: 2rem 2.5rem;
-  }
   
   .carousel-caption h2 {
-    font-size: clamp(1.5rem, 5vw, 2.25rem);
+    font-size: clamp(1.5rem, 4vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0;
+    color: #f1f5f9;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    letter-spacing: -0.02em;
   }
   
+  /* ============================================
+     DOT CONTROLS - SMOOTH & ELEGANT
+     ============================================ */
+  
   .carousel-controls {
+    position: absolute;
     bottom: 20px;
-    padding: 0.5rem 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .carousel-container {
-    height: 60vh;
-    min-height: 350px;
-  }
-  
-  .carousel-caption {
-    bottom: 50px;
-    padding: 1.5rem 2rem;
-    border-radius: var(--border-radius);
-  }
-  
-  .carousel-caption h2 {
-    font-size: clamp(1.25rem, 6vw, 1.75rem);
-  }
-  
-  .carousel-controls {
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.75rem;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   
   .carousel-dot {
-    width: 8px;
-    height: 8px;
-  }
-}
-
-@media (max-width: 480px) {
-  .carousel-container {
-    height: 50vh;
-    min-height: 300px;
-  }
-  
-  .carousel-caption {
-    bottom: 40px;
-    padding: 1.25rem 1.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    will-change: transform;
   }
   
-  .carousel-controls {
-    bottom: 15px;
+  .carousel-dot.active {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.35);
   }
-}
+  
+  .carousel-dot:hover:not(.active) {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+  }
+  
+  /* ============================================
+     RESPONSIVE - PERFECT ON ALL DEVICES
+     ============================================ */
+  
+  @media (max-width: 968px) {
+    .carousel-container {
+      height: 70vh;
+      min-height: 400px;
+    }
+    
+    .carousel-caption {
+      bottom: 70px;
+      padding: 2rem 2.5rem;
+      width: calc(100% - 2.5rem);
+    }
+    
+    .carousel-caption h2 {
+      font-size: clamp(1.5rem, 5vw, 2.25rem);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .carousel-container {
+      height: 60vh;
+      min-height: 350px;
+    }
+    
+    .carousel-caption {
+      bottom: 60px;
+      padding: 2rem 2rem;
+      width: calc(100% - 2rem);
+      border-radius: 12px;
+    }
+    
+    .carousel-caption h2 {
+      font-size: clamp(1.25rem, 6vw, 2rem);
+    }
+    
+    .carousel-controls {
+      bottom: 15px;
+      gap: 0.65rem;
+      padding: 0.65rem 1.25rem;
+    }
+    
+    .carousel-dot {
+      width: 9px;
+      height: 9px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .carousel-container {
+      height: 55vh;
+      min-height: 320px;
+    }
+    
+    .carousel-caption {
+      bottom: 55px;
+      padding: 1.5rem 1.5rem;
+      width: calc(100% - 2rem);
+    }
+    
+    .carousel-caption h2 {
+      font-size: clamp(1.25rem, 7vw, 1.75rem);
+    }
+    
+    .carousel-controls {
+      bottom: 12px;
+      padding: 0.6rem 1rem;
+      gap: 0.6rem;
+    }
+    
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+    }
+  }
+  
+  @media (max-width: 360px) {
+    .carousel-caption {
+      bottom: 50px;
+      padding: 1.25rem 1rem;
+    }
+    
+    .carousel-controls {
+      bottom: 10px;
+      padding: 0.5rem 0.875rem;
+    }
+  }
