@@ -69,7 +69,7 @@ function Navbar() {
       <div className="navbar-container">
         <NavLink to="/" className="navbar-brand" onClick={closeMenu}>
           <span className="brand-icon">✍️</span>
-          <span className="brand-text">Musingsss</span>
+          <span className="brand-text">Thinkio</span>
         </NavLink>
         
         <button 

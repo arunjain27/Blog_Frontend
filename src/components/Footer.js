@@ -1,26 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react'; 
 import '../css/footer.css';
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (email) {
-      // In a real app, you'd send this to your backend
-      setSubscribed(true);
-      setEmail('');
-      setTimeout(() => setSubscribed(false), 3000);
-    }
-  };
-
+ 
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3 className="footer-title">Musingsss</h3>
+            <h3 className="footer-title">Thinkio</h3>
             <p className="footer-description">
               A platform for sharing thoughts, ideas, and stories. Join our community of writers and readers.
             </p>
@@ -98,7 +86,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p className="footer-copyright">
-            © {new Date().getFullYear()} Musingsss. All rights reserved.
+            © {new Date().getFullYear()} Thinkio. All rights reserved.
           </p>
           <p className="footer-tagline">Share your thoughts, inspire the world.</p>
         </div>
