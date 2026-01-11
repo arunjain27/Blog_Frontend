@@ -11,7 +11,7 @@ const Home = () => {
       <div className="home-intro-wrapper">
         <Intro />
       </div>
-      <div className="cards-section-container">
+      <div className="cards-section-container"> 
         <Cardsection />
       </div>
     </div>

@@ -27,17 +27,23 @@ const slidesData = [
 
 const Carousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
+      setIsTransitioning(true);
       setCurrentSlide((prev) => (prev + 1) % slidesData.length);
-    }, 4000);
+      setTimeout(() => setIsTransitioning(false), 1200);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   const goToSlide = (index) => {
+    if (isTransitioning || index === currentSlide) return;
+    setIsTransitioning(true);
     setCurrentSlide(index);
+    setTimeout(() => setIsTransitioning(false), 1200);
   };
 
   return (
@@ -48,12 +54,15 @@ const Carousel = () => {
             key={index}
             className={`carousel-slide ${index === currentSlide ? 'active' : ''}`}
           >
-            <img
-              src={slide.imageSrc}
-              srcSet={slide.imageSrcSet}
-              alt={`Slide ${index + 1}`}
-              loading={index === 0 ? 'eager' : 'lazy'}
-            />
+            {/* IMPORTANT: Wrap image in this div for Ken Burns effect */}
+            <div className="carousel-slide-image-wrapper">
+              <img
+                src={slide.imageSrc}
+                srcSet={slide.imageSrcSet}
+                alt={`Slide ${index + 1}`}
+                loading={index === 0 ? 'eager' : 'lazy'}
+              />
+            </div>
             <div className="carousel-caption">
               <h2>{slide.heading}</h2>
             </div>

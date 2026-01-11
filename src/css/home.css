@@ -1,45 +1,60 @@
 /* ============================================
-   MODERN HOME PAGE STYLES
+   HOME PAGE STYLES (MOBILE SAFE)
    ============================================ */
 
-.home-page {
-  min-height: calc(100vh - var(--navbar-height));
-  background: var(--bg-primary);
-  position: relative;
-  overflow-x: hidden;
-}
-
-.home-page::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100vh;
-  background: linear-gradient(135deg, 
-    rgba(99, 102, 241, 0.03) 0%, 
-    rgba(139, 92, 246, 0.03) 50%,
-    rgba(236, 72, 153, 0.03) 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.home-intro-wrapper {
-  position: relative;
-  z-index: 1;
-}
-
-.cards-section-container {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  margin: 4rem 0;
-  padding: 0 var(--container-padding);
-}
-
-@media (max-width: 768px) {
-  .cards-section-container {
-    margin: 2rem 0;
+   .home-page {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - var(--navbar-height));
+    background: var(--bg-primary);
+    overflow-x: hidden;
   }
-}
+  
+  /* Background gradient layer */
+  .home-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(99, 102, 241, 0.03) 0%,
+      rgba(139, 92, 246, 0.03) 50%,
+      rgba(236, 72, 153, 0.03) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+  }
+  
+  /* Intro wrapper */
+  .home-intro-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+  }
+  
+  /* Card section container */
+  .cards-section-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 4rem auto;
+    padding-inline: var(--container-padding);
+    box-sizing: border-box;
+  }
+  
+  /* Tablet */
+  @media (max-width: 768px) {
+    .cards-section-container {
+      margin: 2.5rem auto;
+    }
+  }
+  
+  /* Mobile */
+  @media (max-width: 480px) {
+    .cards-section-container {
+      margin: 2rem auto;
+      padding-inline: 1rem;
+    }
+  }
+  

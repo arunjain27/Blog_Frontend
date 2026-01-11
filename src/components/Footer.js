@@ -77,35 +77,23 @@ export default function Footer() {
             <h4 className="footer-heading">Quick Links</h4>
             <ul className="footer-links">
               <li><a href="/Allblog">All Blogs</a></li>
-              <li><a href="/addblog">Write a Blog</a></li>
-              <li><a href="/signup">Sign Up</a></li>
+               <li><a href="/signup">Sign Up</a></li>
               <li><a href="/signin">Sign In</a></li>
             </ul>
           </div>
-
           <div className="footer-section">
-            <h4 className="footer-heading">Newsletter</h4>
-            <p className="footer-newsletter-text">
-              Stay updated with our latest blogs and stories.
+            <h4 className="footer-heading">Get Started</h4>
+            <p className="footer-cta-text">
+              Ready to share your story with the world? Start writing today!
             </p>
-            <form onSubmit={handleSubscribe} className="footer-newsletter">
-              <input
-                type="email"
-                placeholder="Your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="footer-newsletter-input"
-                required
-              />
-              <button
-                type="submit"
-                className="footer-newsletter-button"
-                disabled={subscribed}
-              >
-                {subscribed ? '✓ Subscribed!' : 'Subscribe'}
-              </button>
-            </form>
+            <a href="/signup" className="footer-cta-button">
+              Join Now
+            </a>
+            <p className="footer-stats">
+              Join our community of passionate writers
+            </p>
           </div>
+        </div>
         </div>
 
         <div className="footer-bottom">
@@ -114,7 +102,7 @@ export default function Footer() {
           </p>
           <p className="footer-tagline">Share your thoughts, inspire the world.</p>
         </div>
-      </div>
+     
     </footer>
   );
 }
