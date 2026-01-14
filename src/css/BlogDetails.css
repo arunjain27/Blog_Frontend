@@ -206,7 +206,10 @@
   border-color: var(--danger-color);
   color: var(--text-light);
 }
-
+.comment-btn{
+  padding: 5px;
+  background-color: rgb(142, 230, 9);
+}
 .blog-like-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
