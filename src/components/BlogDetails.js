@@ -417,7 +417,7 @@ const BlogDetails = () => {
                 rows="4"
               />
             </div>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary comment-btn">
               <i className="fas fa-paper-plane"></i>
               Post Comment
             </button>
